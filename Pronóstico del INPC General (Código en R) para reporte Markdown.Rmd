@@ -1,6 +1,6 @@
 ---
-    title: "Modelo predictivo del INPC General de MÈxico."
-    author: "Soriano Urb·n Jorge Stephano" 
+    title: "Modelo predictivo del INPC General de M√©xico."
+    author: "Soriano Urb√°n Jorge Stephano" 
     date: "09 junio 2019"
     output: html_document
 ---
@@ -47,15 +47,15 @@ var_x <- zoo::na.approx(var_x)
 
 ```
 
-### Graficando INPC General de MÈxico de 1982 a 2017.
+### Graficando INPC General de M√©xico de 1982 a 2017.
 
 ```{r, echo=FALSE, message=F}
 
-plot(var_x, type = 'l', main = 'INPC General de MÈxico de 1982 a 2017',  sub = 'Fuente: INEGI', ylab= 'INPC General', xlab='AÒo')
+plot(var_x, type = 'l', main = 'INPC General de M√©xico de 1982 a 2017',  sub = 'Fuente: INEGI', ylab= 'INPC General', xlab='A√±o')
 
 ```
 
-### Aplico la prueba; Augmented Dickey-Fuller (adf.test) para observar si la serie tiene el problema de raÌz unitaria.
+### Aplico la prueba; Augmented Dickey-Fuller (adf.test) para observar si la serie tiene el problema de ra√≠z unitaria.
 
 ```{r, echo=F, message=F, warning=FALSE}
 test.raiz <- adf.test(var_x)
@@ -63,12 +63,12 @@ options(digits=4)
 if (test.raiz$p.value < 0.05)
 {
 valor <- test.raiz$p.value  
-    cat("No hay RaÌz unitaria (serie de tiempo estacionaria) el valor p es: ", valor,   
+    cat("No hay Ra√≠z unitaria (serie de tiempo estacionaria) el valor p es: ", valor,   
         "\npor lo tanto, se rechaza la H0 de no estacionariedad.",
          "\nSe puede entonces calcular el modelo de ajuste.")
 } else {
  valor <- test.raiz$p.value
-    cat("RaÌz unitaria (serie de tiempo no estacionaria) el valor p es: " , valor,
+    cat("Ra√≠z unitaria (serie de tiempo no estacionaria) el valor p es: " , valor,
          
         "\nDebido a que la serie no es estacionaria entonces se estabiliza la serie de tiempo",
  "\nantes de estimar el modelo.");     
@@ -83,7 +83,7 @@ n_diff_x <- forecast::ndiffs(var_x, test = c("adf"))
 
 
 ```{r, echo=FALSE, message=FALSE, include=TRUE}
-plot(var_diff_log, type = 'l', main = 'INPC General de MÈxico de 1982 a 2017',  sub = 'Fuente: INEGI', ylab= 'Logaritmo diferenciado', xlab='AÒo')
+plot(var_diff_log, type = 'l', main = 'INPC General de M√©xico de 1982 a 2017',  sub = 'Fuente: INEGI', ylab= 'Logaritmo diferenciado', xlab='A√±o')
 abline(h = mean(var_diff_log),col = 'blue')
 
 
@@ -126,19 +126,19 @@ Se puede entonces calcular el modelo de ajuste")
 }   
 ```
 
-#### Eliminando el componente estacional de la serie de tiempo mediante el c·lculo de las diferencias de orden 12
+#### Eliminando el componente estacional de la serie de tiempo mediante el c√°lculo de las diferencias de orden 12
 
 
 ```{r, echo=FALSE, message=FALSE, include=TRUE}
 var_x_dif_orden <- diff(var_x, lag = 12) ### Variable INPC con diferencia de orden doce
-plot(var_x_dif_orden, type = 'l', main = 'INPC General de MÈxico de 1982 a 2017',  sub = 'Fuente: INEGI', ylab= 'Diferencias de orden 12', xlab='AÒo')
+plot(var_x_dif_orden, type = 'l', main = 'INPC General de M√©xico de 1982 a 2017',  sub = 'Fuente: INEGI', ylab= 'Diferencias de orden 12', xlab='A√±o')
 abline(h = mean(diff(var_x,lag = 12)),col = 'blue')
 
 ```
 
 
 
-### Gr·ficas de la funciÛn de autocorrelaciÛn (ACF) y de la funciÛn de autocorrelaciÛn parcial (PACF) para obtener los patrones del proceso AR() y MA(). 
+### Gr√°ficas de la funci√≥n de autocorrelaci√≥n (ACF) y de la funci√≥n de autocorrelaci√≥n parcial (PACF) para obtener los patrones del proceso AR() y MA(). 
 
 
 ```{r, echo=FALSE, message=FALSE}
@@ -147,7 +147,7 @@ acf2(ts(var_diff_x, frequency = 1))
 ```
 
 
-### Gr·ficas de la funciÛn de autocorrelaciÛn (ACF) y de la funciÛn de autocorrelaciÛn parcial (PACF) para obtener los patrones del proceso AR() y MA()  del componente estacional. 
+### Gr√°ficas de la funci√≥n de autocorrelaci√≥n (ACF) y de la funci√≥n de autocorrelaci√≥n parcial (PACF) para obtener los patrones del proceso AR() y MA()  del componente estacional. 
 
 
 ```{r, echo=FALSE, message=FALSE}
@@ -208,10 +208,10 @@ index_Summary_stat_BIC_bajo <- which(Summary_stat[,3] == min(Summary_stat[,3]))
 BIC_mas_bajo <- cbind(Summary_stat[index_Summary_stat_BIC_bajo,1])
 Ajuste_BIC_mas_bajo <- cbind(Summary_stat[index_Summary_stat_BIC_bajo,3])
 
-cat("Modelo de ajuste con valor Akaike m·s bajo:", Akaike_mas_bajo[1,1])
+cat("Modelo de ajuste con valor Akaike m√°s bajo:", Akaike_mas_bajo[1,1])
 cat("Valor Akaike:", Ajuste_Akaike_mas_bajo[1,1])
 
-cat("Modelo de ajuste con valor BIC m·s bajo:", BIC_mas_bajo[1,1])
+cat("Modelo de ajuste con valor BIC m√°s bajo:", BIC_mas_bajo[1,1])
 cat("Valor BIC:", Ajuste_BIC_mas_bajo[1,1])
 
 ```
@@ -228,7 +228,7 @@ Summary_stat_simetria
 
 ```
 
-#### Medidads de precisiÛn de los modelos de ajuste
+#### Medidads de precisi√≥n de los modelos de ajuste
 
 
 ```{r, echo=F, message=F}
@@ -260,7 +260,7 @@ Summary_accuracy
 
 Summary_accuracy <- cbind(Modelo_Ajustado,MAPE,ME,RMSE,MAE,MPE,MASE)
 
-# Calculando Ìndices para obtener los valores m·s bajos del resumen estadÌstico de exactitud de los modelos de ajuste
+# Calculando √≠ndices para obtener los valores m√°s bajos del resumen estad√≠stico de exactitud de los modelos de ajuste
 
 index_MAPE <- which(Summary_accuracy[,2] == min(Summary_accuracy[,2]))
 
@@ -268,7 +268,7 @@ MAPE_mas_bajo <- cbind(Summary_accuracy[index_MAPE ,1])
 Valor_MAPE_mas_bajo <- cbind(Summary_accuracy[index_MAPE,2])
 
 
-cat("Modelo de ajuste con MAPE m·s bajo:", MAPE_mas_bajo[1,1])
+cat("Modelo de ajuste con MAPE m√°s bajo:", MAPE_mas_bajo[1,1])
 cat("Valor MAPE:", Valor_MAPE_mas_bajo[1,1])
 
 index_ME <- which(Summary_accuracy[,3] == min(Summary_accuracy[,3]))
@@ -277,7 +277,7 @@ ME_mas_bajo <- cbind(Summary_accuracy[index_ME ,1])
 Valor_ME_mas_bajo <- cbind(Summary_accuracy[index_ME,3])
 
 
-cat("Modelo de ajuste con ME m·s bajo:", ME_mas_bajo[1,1])
+cat("Modelo de ajuste con ME m√°s bajo:", ME_mas_bajo[1,1])
 cat("Valor ME:", Valor_ME_mas_bajo[1,1])
 
 index_RMSE <- which(Summary_accuracy[,4] == min(Summary_accuracy[,4]))
@@ -286,7 +286,7 @@ RMSE_mas_bajo <- cbind(Summary_accuracy[index_RMSE ,1])
 Valor_RMSE_mas_bajo <- cbind(Summary_accuracy[index_RMSE,4])
 
 
-cat("Modelo de ajuste con RMSE m·s bajo:", RMSE_mas_bajo[1,1])
+cat("Modelo de ajuste con RMSE m√°s bajo:", RMSE_mas_bajo[1,1])
 cat("Valor RMSE:", Valor_RMSE_mas_bajo[1,1])
 
 index_MAE <- which(Summary_accuracy[,5] == min(Summary_accuracy[,5]))
@@ -295,7 +295,7 @@ MAE_mas_bajo <- cbind(Summary_accuracy[index_MAE ,1])
 Valor_MAE_mas_bajo <- cbind(Summary_accuracy[index_MAE,5])
 
 
-cat("Modelo de ajuste con MAE m·s bajo:", MAE_mas_bajo[1,1])
+cat("Modelo de ajuste con MAE m√°s bajo:", MAE_mas_bajo[1,1])
 cat("Valor MAE:", Valor_MAE_mas_bajo[1,1])
 
 index_MPE <- which(Summary_accuracy[,6] == min(Summary_accuracy[,6]))
@@ -304,7 +304,7 @@ MPE_mas_bajo <- cbind(Summary_accuracy[index_MPE ,1])
 Valor_MPE_mas_bajo <- cbind(Summary_accuracy[index_MPE,6])
 
 
-cat("Modelo de ajuste con MPE m·s bajo:", MPE_mas_bajo[1,1])
+cat("Modelo de ajuste con MPE m√°s bajo:", MPE_mas_bajo[1,1])
 cat("Valor MPE:", Valor_MPE_mas_bajo[1,1])
 
 index_MASE <- which(Summary_accuracy[,7] == min(Summary_accuracy[,7]))
@@ -312,16 +312,16 @@ index_MASE <- which(Summary_accuracy[,7] == min(Summary_accuracy[,7]))
 MASE_mas_bajo <- cbind(Summary_accuracy[index_MASE,1])
 Valor_MASE_mas_bajo <- cbind(Summary_accuracy[index_MASE,7])
 
-cat("Modelo de ajuste con MASE m·s bajo:", MASE_mas_bajo[1,1])
+cat("Modelo de ajuste con MASE m√°s bajo:", MASE_mas_bajo[1,1])
 cat("Valor MASE:", Valor_MASE_mas_bajo[1,1])
 
 ```
 
-### Del an·lisis de los modelos de ajuste y de los estadÌsticos de precisiÛn junto con el an·lisis de las funciones de autocorrelaciÛn obtengo dos modelos de ajuste;
+### Del an√°lisis de los modelos de ajuste y de los estad√≠sticos de precisi√≥n junto con el an√°lisis de las funciones de autocorrelaci√≥n obtengo dos modelos de ajuste;
 
 ### Modelo I
 
-#### El primer modelo contiene el siguiente patrÛn **AR(1)I(2)MA(1)** junto con el patrÛn  de residuos (P,D,Q): **AR(2)I(0)MA(0)**. Se deduce el siguiente modelo de ajuste:
+#### El primer modelo contiene el siguiente patr√≥n **AR(1)I(2)MA(1)** junto con el patr√≥n  de residuos (P,D,Q): **AR(2)I(0)MA(0)**. Se deduce el siguiente modelo de ajuste:
 
 ###### **ajusteARIMA <- arima(INPC_General, order=c(1,2,1), seasonal = list(order = c(2,0,0), period = 12), method="ML", include.mean = TRUE)**
 
@@ -333,9 +333,9 @@ INPC_General <- var_x
 
 ```
 
-#### Observando los p valores del estadÌstico Ljung-Box se identifica que los residuos del modelo ajustado est·n por encima de 0.05 (lÌnea punteada azul), por lo tanto, los datos de la serie de tiempo no est·n autocorrelacionados. De lo contrario la exactitud del modelo predictivo se reduce y la interpretaciÛn de los datos ser· errÛnea.
+#### Observando los p valores del estad√≠stico Ljung-Box se identifica que los residuos del modelo ajustado est√°n por encima de 0.05 (l√≠nea punteada azul), por lo tanto, los datos de la serie de tiempo no est√°n autocorrelacionados. De lo contrario la exactitud del modelo predictivo se reduce y la interpretaci√≥n de los datos ser√° err√≥nea.
 
-### Graficando los cuantiles de la distribuciÛn normal de los residuos del modelo ajustado.
+### Graficando los cuantiles de la distribuci√≥n normal de los residuos del modelo ajustado.
 
 
 ```{r, echo=F, message=F}
@@ -347,7 +347,7 @@ qqline(ajuste_x$resid)
 
 ```
 
-#### Los valores de los cuantiles est·n posicionados sobre la lÌnea.
+#### Los valores de los cuantiles est√°n posicionados sobre la l√≠nea.
 
 
 
@@ -362,7 +362,7 @@ hist(resid_ajuste_x, main = "Histograma de los residuos del ajuste del modelo.",
 ```
 
 
-#### Resumen estadÌstico del ajuste del modelo
+#### Resumen estad√≠stico del ajuste del modelo
 
 
 ```{r, echo=F, message=F}
@@ -374,7 +374,7 @@ cat("Skewness:",skewness(ajuste_x$resid))
 cat("Kurtosis:",kurtosis(ajuste_x$resid))
 ```
 
-### SimulaciÛn de pronÛstico: INPC General.
+### Simulaci√≥n de pron√≥stico: INPC General.
 
 ```{r message=F, include=FALSE}
 pronostico <- sarima.for(INPC_General, n.ahead = 12, p = 1, d =2, q = 1, P = 2, D = 0, Q = 0, S = 12, no.constant = FALSE)
@@ -382,8 +382,8 @@ values.predict_x <- pronostico$pred
 
 ```
 
-##### LÌnea **roja** valores observados de la serie de tiempo
-##### LÌnea **azul** valores pronosticados de la serie de tiempo
+##### L√≠nea **roja** valores observados de la serie de tiempo
+##### L√≠nea **azul** valores pronosticados de la serie de tiempo
 
 
 
@@ -407,7 +407,7 @@ simulation_plot_x
 ```
 
 
-### **PronÛstico de 12 meses de INPC General de MÈxico.**
+### **Pron√≥stico de 12 meses de INPC General de M√©xico.**
 
 
 ```{r, echo=F, message=FALSE, warning=FALSE}
@@ -429,7 +429,7 @@ pronostico_x <- sarima.for(INPC_General, n.ahead = 12, p = 1, d =2, q = 1, P = 2
 ```
 
 
-### Valores de la predicciÛn
+### Valores de la predicci√≥n
 
 
 ```{r, echo=F, message=F}
@@ -437,7 +437,7 @@ pronostico_x <- sarima.for(INPC_General, n.ahead = 12, p = 1, d =2, q = 1, P = 2
 
 ```
 
-### Calculando inflaciÛn para MÈxico
+### Calculando inflaci√≥n para M√©xico
 
 ```{r, echo=F, message=F}
 
@@ -479,7 +479,7 @@ var_y <- zoo::na.approx(var_y)
 
 ```
 
-### El segundo modelo contiene el siguiente patrÛn **AR(6)I(2)MA(6)** junto con el patrÛn  de residuos (P,D,Q): **AR(2)I(0)MA(0)**  . Se deduce el siguiente modelo de ajuste:
+### El segundo modelo contiene el siguiente patr√≥n **AR(6)I(2)MA(6)** junto con el patr√≥n  de residuos (P,D,Q): **AR(2)I(0)MA(0)**  . Se deduce el siguiente modelo de ajuste:
   
 ###### **ajusteARIMA <- arima(INPC_General, order=c(6,2,6), seasonal = list(order = c(2,0,0), period = 12), method="ML", include.mean = TRUE)**
 
@@ -491,9 +491,9 @@ tsdiag(ajuste_y)
 INPC_General <- var_y
 ```
 
-#### Observando los p valores del estadÌstico Ljung-Box se identifica que los residuos del modelo ajustado est·n por encima de 0.05 (lÌnea punteada azul), por lo tanto, los datos de la serie de tiempo no est·n autocorrelacionados. De lo contrario la exactitud del modelo predictivo se reduce y la interpretaciÛn de los datos ser· errÛnea.
+#### Observando los p valores del estad√≠stico Ljung-Box se identifica que los residuos del modelo ajustado est√°n por encima de 0.05 (l√≠nea punteada azul), por lo tanto, los datos de la serie de tiempo no est√°n autocorrelacionados. De lo contrario la exactitud del modelo predictivo se reduce y la interpretaci√≥n de los datos ser√° err√≥nea.
 
-### Graficando los cuantiles de la distribuciÛn normal de los residuos del modelo ajustado.
+### Graficando los cuantiles de la distribuci√≥n normal de los residuos del modelo ajustado.
 
 
 ```{r, echo=F, message=F}
@@ -505,7 +505,7 @@ qqline(ajuste_y$resid)
 
 ```
 
-#### Los valores de los cuantiles est·n posicionados sobre la lÌnea.
+#### Los valores de los cuantiles est√°n posicionados sobre la l√≠nea.
 
 
 
@@ -520,7 +520,7 @@ hist(resid_ajuste_y, main = "Histograma de los residuos del ajuste del modelo.",
 ```
 
 
-#### Resumen estadÌstico del ajuste del modelo
+#### Resumen estad√≠stico del ajuste del modelo
 
 
 ```{r, echo=F, message=F}
@@ -533,7 +533,7 @@ cat("Kurtosis:",kurtosis(ajuste_y$resid))
 
 ```
 
-### SimulaciÛn de pronÛstico: INPC General.
+### Simulaci√≥n de pron√≥stico: INPC General.
 
 ```{r message=F, include=FALSE}
 pronostico <- sarima.for(INPC_General, n.ahead = 12, p = 6, d =2, q = 6, P = 2, D = 0, Q = 0, S = 12, no.constant = FALSE)
@@ -542,8 +542,8 @@ values.predict_y <- pronostico$pred
 
 ```
 
-##### LÌnea **roja** valores observados de la serie de tiempo
-##### LÌnea **azul** valores pronosticados de la serie de tiempo
+##### L√≠nea **roja** valores observados de la serie de tiempo
+##### L√≠nea **azul** valores pronosticados de la serie de tiempo
 
 
 
@@ -566,7 +566,7 @@ simulation_plot_y <- ggplot(data= simulation_y, aes(x=Periodo_y, y=Observed_y, g
 simulation_plot_y
 ```
 
-### **PronÛstico de 12 meses de INPC General de MÈxico.**
+### **Pron√≥stico de 12 meses de INPC General de M√©xico.**
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE }
 setwd('F:/OneDrive/Proyecto_7/New folder') 
@@ -586,7 +586,7 @@ pronostico_y <- sarima.for(INPC_General, n.ahead = 12, p = 6, d =2, q = 6, P = 2
 
 ```
 
-### Valores de la predicciÛn
+### Valores de la predicci√≥n
 
 ```{r, echo=F, message=F}
 (pronostico_y$pred)
