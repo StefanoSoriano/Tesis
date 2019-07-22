@@ -1,0 +1,594 @@
+---
+    title: "Modelo predictivo del INPC General de México."
+    author: "Soriano Urbán Jorge Stephano" 
+    date: "09 junio 2019"
+    output: html_document
+---
+
+```{r echo=F, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+setwd('F:/OneDrive/Proyecto_7/New folder')
+INPC_General <- read.csv('INPC General.csv', header = T, dec = '.', stringsAsFactors = F)
+ 
+
+library(astsa)
+library(tseries)
+library(timeSeries)
+library(fGarch)
+library(stats)
+library(zoo)
+library(ggplot2)
+library(moments)
+
+```
+
+```{r echo=F, message=FALSE, warning=FALSE}
+###   Particionando la serie de tiempo en dos conjuntos 
+ ##   Conjunto 1 -- Base de entrenamiento (train)
+ ##   Conjunto 2 -- Base de prueba (test)
+var_x <- INPC_General
+
+longitud_x <- length(var_x[,2])
+numTrain_x <- longitud_x - 12
+
+train_x <- var_x[1:numTrain_x,]
+test_x <- tail(var_x, 12) #  Valores reales de la serie 
+                              #  que van a ser contrastados con los pronosticados.
+
+var_x <- train_x #  Asignando valores del entrenamiento a la  variable x
+
+#var_x <- ts(var_x, start = c(1982), end = c(2017)) 
+#var_x <- var_x[, -1] 
+
+var_x <- ts(var_x, start = c(1982, 1), frequency = 12) 
+var_x <- var_x[, -1] 
+var_x <- zoo::na.approx(var_x)
+
+
+```
+
+### Graficando INPC General de México de 1982 a 2017.
+
+```{r, echo=FALSE, message=F}
+
+plot(var_x, type = 'l', main = 'INPC General de México de 1982 a 2017',  sub = 'Fuente: INEGI', ylab= 'INPC General', xlab='Año')
+
+```
+
+### Aplico la prueba; Augmented Dickey-Fuller (adf.test) para observar si la serie tiene el problema de raíz unitaria.
+
+```{r, echo=F, message=F, warning=FALSE}
+test.raiz <- adf.test(var_x)
+options(digits=4) 
+if (test.raiz$p.value < 0.05)
+{
+valor <- test.raiz$p.value  
+    cat("No hay Raíz unitaria (serie de tiempo estacionaria) el valor p es: ", valor,   
+        "\npor lo tanto, se rechaza la H0 de no estacionariedad.",
+         "\nSe puede entonces calcular el modelo de ajuste.")
+} else {
+ valor <- test.raiz$p.value
+    cat("Raíz unitaria (serie de tiempo no estacionaria) el valor p es: " , valor,
+         
+        "\nDebido a que la serie no es estacionaria entonces se estabiliza la serie de tiempo",
+ "\nantes de estimar el modelo.");     
+n_diff_x <- forecast::ndiffs(var_x, test = c("adf"))
+    var_diff_x <- diff(var_x, n_diff_x)
+    var_diff_log <- diff(log(var_x), n_diff_x)
+
+ }    
+```
+
+#### Eliminando la tendencia y estabilizando la varianza de la  serie de tiempo mediante el logaritmo diferenciado, para transformar la serie de tiempo a estacionaria.
+
+
+```{r, echo=FALSE, message=FALSE, include=TRUE}
+plot(var_diff_log, type = 'l', main = 'INPC General de México de 1982 a 2017',  sub = 'Fuente: INEGI', ylab= 'Logaritmo diferenciado', xlab='Año')
+abline(h = mean(var_diff_log),col = 'blue')
+
+
+```
+
+
+### Se vuelve a aplicar la prueba; Augmented Dickey-Fuller (adf.test) para comprobar que la serie es estacionaria
+```{r, echo=F, message=F, warning=FALSE}
+test.raiz <- adf.test(var_diff_x)
+options(digits=4) 
+if (test.raiz$p.value < 0.05)
+{
+valor <- test.raiz$p.value  
+     cat("Serie de tiempo estacionaria el valor p es: ", valor, 
+    "
+por lo tanto, se rechaza la H0 de no estacionariedad.
+Se puede entonces calcular el modelo de ajuste")
+} else {
+ valor <- test.raiz$p.value
+    cat("Serie de tiempo no estacionaria.
+",
+       "
+Debido a que la serie sigue presentando no estacionariedad",
+       "se calculan las primeras diferencias de la serie",
+        "
+junto con el rezago de orden 12, el valor p es el siguiente: ")
+    diff_orden <- diff(var_x, lag = 12)
+    test.raiz <- adf.test(diff_orden)
+       options(digits=4) 
+       if (test.raiz$p.value < 0.05)
+       {
+          valor <- test.raiz$p.value  
+          cat(valor, 
+           "
+por lo tanto, la serie es estacionaria. 
+Se puede entonces calcular el modelo de ajuste")
+       } else {
+           cat("Serie de tiempo no estacionaria.")
+         }
+}   
+```
+
+#### Eliminando el componente estacional de la serie de tiempo mediante el cálculo de las diferencias de orden 12
+
+
+```{r, echo=FALSE, message=FALSE, include=TRUE}
+var_x_dif_orden <- diff(var_x, lag = 12) ### Variable INPC con diferencia de orden doce
+plot(var_x_dif_orden, type = 'l', main = 'INPC General de México de 1982 a 2017',  sub = 'Fuente: INEGI', ylab= 'Diferencias de orden 12', xlab='Año')
+abline(h = mean(diff(var_x,lag = 12)),col = 'blue')
+
+```
+
+
+
+### Gráficas de la función de autocorrelación (ACF) y de la función de autocorrelación parcial (PACF) para obtener los patrones del proceso AR() y MA(). 
+
+
+```{r, echo=FALSE, message=FALSE}
+acf2(ts(var_diff_x, frequency = 1)) 
+ 
+```
+
+
+### Gráficas de la función de autocorrelación (ACF) y de la función de autocorrelación parcial (PACF) para obtener los patrones del proceso AR() y MA()  del componente estacional. 
+
+
+```{r, echo=FALSE, message=FALSE}
+
+acf2(ts(var_x_dif_orden, frequency = 1))
+ 
+```
+
+### Generando modelos de ajuste
+
+#### Criterios AIC y BIC de los modelos de ajuste
+
+
+```{r, echo=F, message=F}
+
+INPC <- var_x
+options(digits=2)
+ 
+ ajuste_INPC_1 <- arima(INPC, order=c(0,2,0), seasonal = list(order = c(2,0,0), period = 12),method="CSS-ML", include.mean = TRUE)
+ ajuste_INPC_2 <- arima(INPC, order=c(0,2,1), seasonal = list(order = c(2,0,0), period = 12),method="CSS-ML", include.mean = TRUE)
+ ajuste_INPC_3 <- arima(INPC, order=c(1,2,0), seasonal = list(order = c(2,0,0), period = 12),method="CSS-ML", include.mean = TRUE)
+ ajuste_INPC_4 <- arima(INPC, order=c(1,2,1), seasonal = list(order = c(2,0,0), period = 12),method="CSS-ML", include.mean = TRUE)
+ ajuste_INPC_5 <- arima(INPC, order=c(3,2,3), seasonal = list(order = c(2,0,0), period = 12),method="CSS-ML", include.mean = TRUE)
+ ajuste_INPC_6 <- arima(INPC, order=c(6,2,6), seasonal = list(order = c(2,0,0), period = 12),method="CSS-ML", include.mean = TRUE)
+
+Modelo_Ajustado <- c("ajuste_INPC_1","ajuste_INPC_2","ajuste_INPC_3","ajuste_INPC_4","ajuste_INPC_5","ajuste_INPC_6")
+Patrones_pdq_y_PDQ <- c("(0,2,0) (2,0,0)","(0,2,1) (2,0,0)","(1,2,0) (2,0,0)","(1,2,1) (2,0,0)","(3,2,3) (2,0,0)","(6,2,6) (2,0,0)")
+AIC <- c(ajuste_INPC_1$aic, ajuste_INPC_2$aic, ajuste_INPC_3$aic, ajuste_INPC_4$aic,ajuste_INPC_5$aic, ajuste_INPC_6$aic)
+Sesgo <- c(skewness(ajuste_INPC_1$resid),skewness(ajuste_INPC_2$resid),skewness(ajuste_INPC_3$resid),
+           skewness(ajuste_INPC_4$resid), skewness(ajuste_INPC_5$resid),skewness(ajuste_INPC_6$resid))
+Curtosis <- c(kurtosis(ajuste_INPC_1$resid),kurtosis(ajuste_INPC_2$resid),kurtosis(ajuste_INPC_3$resid),
+              kurtosis(ajuste_INPC_4$resid), kurtosis(ajuste_INPC_5$resid),kurtosis(ajuste_INPC_6$resid))
+BIC <- c(BIC(ajuste_INPC_1), BIC(ajuste_INPC_2), BIC(ajuste_INPC_3), BIC(ajuste_INPC_4),BIC(ajuste_INPC_5), BIC(ajuste_INPC_6))
+
+
+Summary_stat <- cbind(Patrones_pdq_y_PDQ, AIC, BIC)
+Summary_stat
+
+Modelo_Ajustado <- as.data.frame(Modelo_Ajustado)
+
+AIC <- as.data.frame(AIC)
+BIC <- as.data.frame(BIC)
+
+
+Summary_stat <- cbind(Modelo_Ajustado, AIC, BIC)
+
+# AIC
+
+index_Summary_stat_Akaike_bajo <- which(Summary_stat[,2] == min(Summary_stat[,2]))
+
+Akaike_mas_bajo <- cbind(Summary_stat[index_Summary_stat_Akaike_bajo,1])
+Ajuste_Akaike_mas_bajo <- cbind(Summary_stat[index_Summary_stat_Akaike_bajo,2])
+
+# BIC
+
+index_Summary_stat_BIC_bajo <- which(Summary_stat[,3] == min(Summary_stat[,3]))
+
+BIC_mas_bajo <- cbind(Summary_stat[index_Summary_stat_BIC_bajo,1])
+Ajuste_BIC_mas_bajo <- cbind(Summary_stat[index_Summary_stat_BIC_bajo,3])
+
+cat("Modelo de ajuste con valor Akaike más bajo:", Akaike_mas_bajo[1,1])
+cat("Valor Akaike:", Ajuste_Akaike_mas_bajo[1,1])
+
+cat("Modelo de ajuste con valor BIC más bajo:", BIC_mas_bajo[1,1])
+cat("Valor BIC:", Ajuste_BIC_mas_bajo[1,1])
+
+```
+
+#### Sesgo y Curtosis de los modelos de ajuste
+
+
+```{r, echo=F, message=F}
+
+
+Summary_stat_simetria <- cbind(Sesgo, Curtosis)
+Summary_stat_simetria
+
+
+```
+
+#### Medidads de precisión de los modelos de ajuste
+
+
+```{r, echo=F, message=F}
+
+accuracy_fit_INPC_1 <- forecast::accuracy(ajuste_INPC_1)
+accuracy_fit_INPC_2 <- forecast::accuracy(ajuste_INPC_2)
+accuracy_fit_INPC_3 <- forecast::accuracy(ajuste_INPC_3)
+accuracy_fit_INPC_4 <- forecast::accuracy(ajuste_INPC_4)
+accuracy_fit_INPC_5 <- forecast::accuracy(ajuste_INPC_5)
+accuracy_fit_INPC_6 <- forecast::accuracy(ajuste_INPC_6)
+
+
+MAPE <- c(accuracy_fit_INPC_1[5],accuracy_fit_INPC_2[5],accuracy_fit_INPC_3[5],
+          accuracy_fit_INPC_4[5],accuracy_fit_INPC_5[5],accuracy_fit_INPC_6[5])
+ME <- c(accuracy_fit_INPC_1[1],accuracy_fit_INPC_2[1],accuracy_fit_INPC_3[1],
+          accuracy_fit_INPC_4[1],accuracy_fit_INPC_5[1],accuracy_fit_INPC_6[1])
+RMSE <- c(accuracy_fit_INPC_1[2],accuracy_fit_INPC_2[2],accuracy_fit_INPC_3[2],
+          accuracy_fit_INPC_4[2],accuracy_fit_INPC_5[2],accuracy_fit_INPC_6[2])
+MAE <- c(accuracy_fit_INPC_1[3],accuracy_fit_INPC_2[3],accuracy_fit_INPC_3[3],
+          accuracy_fit_INPC_4[3],accuracy_fit_INPC_5[3],accuracy_fit_INPC_6[3])
+MPE <- c(accuracy_fit_INPC_1[4],accuracy_fit_INPC_2[4],accuracy_fit_INPC_3[4],
+          accuracy_fit_INPC_4[4],accuracy_fit_INPC_5[4],accuracy_fit_INPC_6[4])
+MASE <- c(accuracy_fit_INPC_1[6],accuracy_fit_INPC_2[6],accuracy_fit_INPC_3[6],
+          accuracy_fit_INPC_4[6],accuracy_fit_INPC_5[6],accuracy_fit_INPC_6[6])
+
+
+Summary_accuracy <- cbind(MAPE,ME,RMSE,MAE,MPE,MASE)
+Summary_accuracy
+
+Summary_accuracy <- cbind(Modelo_Ajustado,MAPE,ME,RMSE,MAE,MPE,MASE)
+
+# Calculando índices para obtener los valores más bajos del resumen estadístico de exactitud de los modelos de ajuste
+
+index_MAPE <- which(Summary_accuracy[,2] == min(Summary_accuracy[,2]))
+
+MAPE_mas_bajo <- cbind(Summary_accuracy[index_MAPE ,1])
+Valor_MAPE_mas_bajo <- cbind(Summary_accuracy[index_MAPE,2])
+
+
+cat("Modelo de ajuste con MAPE más bajo:", MAPE_mas_bajo[1,1])
+cat("Valor MAPE:", Valor_MAPE_mas_bajo[1,1])
+
+index_ME <- which(Summary_accuracy[,3] == min(Summary_accuracy[,3]))
+
+ME_mas_bajo <- cbind(Summary_accuracy[index_ME ,1])
+Valor_ME_mas_bajo <- cbind(Summary_accuracy[index_ME,3])
+
+
+cat("Modelo de ajuste con ME más bajo:", ME_mas_bajo[1,1])
+cat("Valor ME:", Valor_ME_mas_bajo[1,1])
+
+index_RMSE <- which(Summary_accuracy[,4] == min(Summary_accuracy[,4]))
+
+RMSE_mas_bajo <- cbind(Summary_accuracy[index_RMSE ,1])
+Valor_RMSE_mas_bajo <- cbind(Summary_accuracy[index_RMSE,4])
+
+
+cat("Modelo de ajuste con RMSE más bajo:", RMSE_mas_bajo[1,1])
+cat("Valor RMSE:", Valor_RMSE_mas_bajo[1,1])
+
+index_MAE <- which(Summary_accuracy[,5] == min(Summary_accuracy[,5]))
+
+MAE_mas_bajo <- cbind(Summary_accuracy[index_MAE ,1])
+Valor_MAE_mas_bajo <- cbind(Summary_accuracy[index_MAE,5])
+
+
+cat("Modelo de ajuste con MAE más bajo:", MAE_mas_bajo[1,1])
+cat("Valor MAE:", Valor_MAE_mas_bajo[1,1])
+
+index_MPE <- which(Summary_accuracy[,6] == min(Summary_accuracy[,6]))
+
+MPE_mas_bajo <- cbind(Summary_accuracy[index_MPE ,1])
+Valor_MPE_mas_bajo <- cbind(Summary_accuracy[index_MPE,6])
+
+
+cat("Modelo de ajuste con MPE más bajo:", MPE_mas_bajo[1,1])
+cat("Valor MPE:", Valor_MPE_mas_bajo[1,1])
+
+index_MASE <- which(Summary_accuracy[,7] == min(Summary_accuracy[,7]))
+
+MASE_mas_bajo <- cbind(Summary_accuracy[index_MASE,1])
+Valor_MASE_mas_bajo <- cbind(Summary_accuracy[index_MASE,7])
+
+cat("Modelo de ajuste con MASE más bajo:", MASE_mas_bajo[1,1])
+cat("Valor MASE:", Valor_MASE_mas_bajo[1,1])
+
+```
+
+### Del análisis de los modelos de ajuste y de los estadísticos de precisión junto con el análisis de las funciones de autocorrelación obtengo dos modelos de ajuste;
+
+### Modelo I
+
+#### El primer modelo contiene el siguiente patrón **AR(1)I(2)MA(1)** junto con el patrón  de residuos (P,D,Q): **AR(2)I(0)MA(0)**. Se deduce el siguiente modelo de ajuste:
+
+###### **ajusteARIMA <- arima(INPC_General, order=c(1,2,1), seasonal = list(order = c(2,0,0), period = 12), method="ML", include.mean = TRUE)**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+INPC <- var_x
+ajuste_x <- arima(INPC, order=c(1,2,1), seasonal = list(order = c(2,0,0), period = 12),method="CSS-ML", include.mean = TRUE)
+tsdiag(ajuste_x)
+INPC_General <- var_x
+
+```
+
+#### Observando los p valores del estadístico Ljung-Box se identifica que los residuos del modelo ajustado están por encima de 0.05 (línea punteada azul), por lo tanto, los datos de la serie de tiempo no están autocorrelacionados. De lo contrario la exactitud del modelo predictivo se reduce y la interpretación de los datos será errónea.
+
+### Graficando los cuantiles de la distribución normal de los residuos del modelo ajustado.
+
+
+```{r, echo=F, message=F}
+
+qqnorm(ajuste_x$resid, main = "Normal Q-Q Plot",
+       xlab = "Theoretical Quantiles", ylab = "Sample Quantiles")
+qqline(ajuste_x$resid)
+
+
+```
+
+#### Los valores de los cuantiles están posicionados sobre la línea.
+
+
+
+```{r, echo=F, message=F}
+
+resid_ajuste_x <- ajuste_x$residuals
+plot(resid_ajuste_x, main = "Graficando los residuos del ajuste del modelo.", ylab = "Residuos", type = "o")
+abline(h = mean(resid_ajuste_x), col = "blue")
+
+hist(resid_ajuste_x, main = "Histograma de los residuos del ajuste del modelo.", col= "black", xlab = "Residuos")
+
+```
+
+
+#### Resumen estadístico del ajuste del modelo
+
+
+```{r, echo=F, message=F}
+cat("Sigma Cuadrado:", ajuste_x$sigma2)
+cat("Media de los residuos:", mean(resid_ajuste_x))
+
+cat("Akaike:",ajuste_x$aic)
+cat("Skewness:",skewness(ajuste_x$resid))
+cat("Kurtosis:",kurtosis(ajuste_x$resid))
+```
+
+### Simulación de pronóstico: INPC General.
+
+```{r message=F, include=FALSE}
+pronostico <- sarima.for(INPC_General, n.ahead = 12, p = 1, d =2, q = 1, P = 2, D = 0, Q = 0, S = 12, no.constant = FALSE)
+values.predict_x <- pronostico$pred
+
+```
+
+##### Línea **roja** valores observados de la serie de tiempo
+##### Línea **azul** valores pronosticados de la serie de tiempo
+
+
+
+```{r, echo=F, message=F}
+
+Periodo_x <- gsub("/(*)", " ", test_x[,1])
+Observed_x <- test_x[,2]
+Forecasted_x <- values.predict_x
+
+simulation_x <- data.frame(Periodo_x, Observed_x, Forecasted_x)
+
+simulation_plot_x <- ggplot(data= simulation_x, aes(x=Periodo_x, y=Observed_x, group=1)) + 
+  geom_line(col="red2", size = 1.1) + 
+  geom_point(col="red2", size = 3) + 
+  geom_line(col="deeppink2", size = 3.5, alpha = 0.18) +
+  labs(title = "Valores observados y valores pronosticados.",x = "Fecha", y = "INPC General")+ 
+  geom_line(col = "Cyan4", size = 1.1, aes(y=Forecasted_x)) + 
+  geom_point(col = "Cyan4", size = 3, aes(y=Forecasted_x)) +
+  geom_line(col="Cyan", size = 3.5, alpha = 0.18,aes(y=Forecasted_x))
+simulation_plot_x
+```
+
+
+### **Pronóstico de 12 meses de INPC General de México.**
+
+
+```{r, echo=F, message=FALSE, warning=FALSE}
+setwd('F:/OneDrive/Proyecto_7/New folder')
+INPC_General <- read.csv('INPC General.csv', header = T, dec = '.', stringsAsFactors = F)
+var_x <- INPC_General
+#var_x <- ts(var_x, start = c(1982), end = c(2017)) 
+#var_x <- var_x[, -1] 
+
+var_x <- ts(var_x, start = c(1982, 1), frequency = 12) 
+var_x <- var_x[, -1] 
+var_x <- zoo::na.approx(var_x)
+
+INPC_General <- var_x  
+
+
+pronostico_x <- sarima.for(INPC_General, n.ahead = 12, p = 1, d =2, q = 1, P = 2, D = 0, Q = 0, S = 12, no.constant = FALSE)
+
+```
+
+
+### Valores de la predicción
+
+
+```{r, echo=F, message=F}
+(pronostico_x$pred)
+
+```
+
+### Calculando inflación para México
+
+```{r, echo=F, message=F}
+
+
+```
+
+
+### Modelo II
+
+```{r echo=F, message=FALSE, warning=FALSE, paged.print=FALSE}
+setwd('F:/OneDrive/Proyecto_7/New folder') 
+INPC_General <- read.csv('INPC General.csv', header = T, dec = '.', stringsAsFactors = F)
+
+```
+
+
+```{r echo=F, message=FALSE, warning=FALSE}
+###   Particionando la serie de tiempo en dos conjuntos 
+ ##   Conjunto 1 -- Base de entrenamiento (train)
+ ##   Conjunto 2 -- Base de prueba (test)
+var_y <- INPC_General
+
+longitud_y <- length(var_y[,2])
+numTrain_y <- longitud_y - 12
+
+train_y <- var_y[1:numTrain_y,]
+test_y <- tail(var_y, 12) #  Valores reales de la serie 
+                              #  que van a ser contrastados con los pronosticados.
+
+var_y <- train_y #  Asignando valores del entrenamiento a la  variable y
+
+#var_y <- ts(var_y, start = c(1982), end = c(2017))
+#var_y <- var_y[, - 1]
+
+    var_y <- ts(var_y, start = c(1982, 1), frequency = 12)
+    var_y <- var_y[, - 1]
+var_y <- zoo::na.approx(var_y)
+    
+
+```
+
+### El segundo modelo contiene el siguiente patrón **AR(6)I(2)MA(6)** junto con el patrón  de residuos (P,D,Q): **AR(2)I(0)MA(0)**  . Se deduce el siguiente modelo de ajuste:
+  
+###### **ajusteARIMA <- arima(INPC_General, order=c(6,2,6), seasonal = list(order = c(2,0,0), period = 12), method="ML", include.mean = TRUE)**
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+INPC <- var_y
+ajuste_y <- arima(INPC, order=c(6,2,6), seasonal = list(order = c(2,0,0), period = 12),method="CSS-ML", include.mean = TRUE)
+tsdiag(ajuste_y)
+INPC_General <- var_y
+```
+
+#### Observando los p valores del estadístico Ljung-Box se identifica que los residuos del modelo ajustado están por encima de 0.05 (línea punteada azul), por lo tanto, los datos de la serie de tiempo no están autocorrelacionados. De lo contrario la exactitud del modelo predictivo se reduce y la interpretación de los datos será errónea.
+
+### Graficando los cuantiles de la distribución normal de los residuos del modelo ajustado.
+
+
+```{r, echo=F, message=F}
+
+qqnorm(ajuste_y$resid, main = "Normal Q-Q Plot",
+       xlab = "Theoretical Quantiles", ylab = "Sample Quantiles")
+qqline(ajuste_y$resid)
+
+
+```
+
+#### Los valores de los cuantiles están posicionados sobre la línea.
+
+
+
+```{r, echo=F, message=F}
+
+resid_ajuste_y <- ajuste_y$residuals
+plot(resid_ajuste_y, main = "Graficando los residuos del ajuste del modelo.", ylab = "Residuos", type = "o")
+abline(h = mean(resid_ajuste_y), col = "blue")
+
+hist(resid_ajuste_y, main = "Histograma de los residuos del ajuste del modelo.", col= "black", xlab = "Residuos")
+
+```
+
+
+#### Resumen estadístico del ajuste del modelo
+
+
+```{r, echo=F, message=F}
+cat("Sigma Cuadrado:", ajuste_y$sigma2)
+cat("Media de los residuos:", mean(resid_ajuste_y))
+
+cat("Akaike:",ajuste_y$aic)
+cat("Skewness:",skewness(ajuste_y$resid))
+cat("Kurtosis:",kurtosis(ajuste_y$resid))
+
+```
+
+### Simulación de pronóstico: INPC General.
+
+```{r message=F, include=FALSE}
+pronostico <- sarima.for(INPC_General, n.ahead = 12, p = 6, d =2, q = 6, P = 2, D = 0, Q = 0, S = 12, no.constant = FALSE)
+
+values.predict_y <- pronostico$pred
+
+```
+
+##### Línea **roja** valores observados de la serie de tiempo
+##### Línea **azul** valores pronosticados de la serie de tiempo
+
+
+
+```{r, echo=F, message=F}
+
+Periodo_y <- gsub("/(*)", " ", test_y[,1])
+Observed_y <- test_y[,2]
+Forecasted_y <- values.predict_y
+
+simulation_y <- data.frame(Periodo_y, Observed_y, Forecasted_y)
+
+simulation_plot_y <- ggplot(data= simulation_y, aes(x=Periodo_y, y=Observed_y, group=1)) + 
+  geom_line(col="red2", size = 1.1) + 
+  geom_point(col="red2", size = 3)+ 
+  geom_line(col="deeppink2", size = 3.5, alpha = 0.18) +
+  labs(title = "Valores observados y valores pronosticados.",x = "Fecha", y = "INPC General") + 
+  geom_line(col = "Cyan4", size = 1.1, aes(y=Forecasted_y)) + 
+  geom_point(col = "Cyan4", size = 3, aes(y=Forecasted_y)) +
+  geom_line(col="Cyan", size = 3.5, alpha = 0.18,aes(y=Forecasted_y))
+simulation_plot_y
+```
+
+### **Pronóstico de 12 meses de INPC General de México.**
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE }
+setwd('F:/OneDrive/Proyecto_7/New folder') 
+INPC_General <- read.csv('INPC General.csv', header = T, dec = '.', stringsAsFactors = F)
+var_y <- INPC_General
+
+#var_y <- ts(var_y, start = c(1982), end = c(2017))
+#var_y <- var_y[, - 1]
+
+    var_y <- ts(var_y, start = c(1982, 1), frequency = 12)
+    var_y <- var_y[, - 1]
+var_y <- zoo::na.approx(var_y)
+
+INPC_General <- var_y
+
+pronostico_y <- sarima.for(INPC_General, n.ahead = 12, p = 6, d =2, q = 6, P = 2, D = 0, Q = 0, S = 12, no.constant = FALSE)
+
+```
+
+### Valores de la predicción
+
+```{r, echo=F, message=F}
+(pronostico_y$pred)
+
+```
