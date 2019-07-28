@@ -1,6 +1,8 @@
 # Tesis 
 
-##### En este proyecto iré subiendo los avances de mi tesis para recibir el grado de Economista, el proyecto es un pronóstico de la inflación de 2019 en México; analizando el INPC General. Iré reportando los resultados en el archivo *Reporte_del_pronóstico_del_INPC_General.html*.
+##### En este proyecto iré subiendo los avances de mi tesis para recibir el grado de Economista, el proyecto es un pronóstico de la inflación de 2019 en México; analizando el INPC General. 
+
+##### Iré reportando los resultados en el archivo *Reporte_del_pronóstico_del_INPC_General.html*.
 
 # En cuanto al reporte:
 
@@ -19,4 +21,4 @@ de esa lista seleccionas *"Save with Encoding"* y selecionas la codificación **
 signos de interrogación que sustituían a los caracteres latinos desaparecerán y aparecerán los caracteres adecuados.
 
 Guardas el archivo HTML dentro de un directorio en el computador y lo nombras como *"Reporte de Tesis INPC General"*, vas a la 
-ruta del directorio y das doble click al archivo: Reporte de Tesis INPC General, abrirá una pestaña en tu navegador web predeterinado.
+ruta del directorio y das doble click al archivo: Reporte de Tesis INPC General, abrirá una pestaña en tu navegador web predeterminado.
