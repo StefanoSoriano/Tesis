@@ -25,10 +25,12 @@ ruta del directorio y das doble click al archivo: Reporte de Tesis INPC General,
 
 # En cuanto a los resultados del pronóstico:
 
-Generé dos modelos de ajuste del INPC General y mediante las funciones de autocorrelación y autocorrelación parcial obtuve los siguiente patrones ARIMA y patrones estacionales:
+Generé dos modelos de ajuste del INPC General y mediante las funciones de autocorrelación y autocorrelación parcial obtuve los siguientes patrones ARIMA y patrones estacionales:
 
-  * **Modelo 1** AR(1)I(2)MA(1) y el patrón de residuos (P,D,Q): AR(2)I(0)MA(0)
-  * **Modelo 2** AR(6)I(2)MA(6) y el patrón de residuos (P,D,Q): AR(2)I(0)MA(0)
+  * **Modelo 1** AR(1)I(2)MA(1) y el patrón de residuos (P,D,Q): AR(2)I(0)MA(0) S[12]
+  * **Modelo 2** AR(6)I(2)MA(6) y el patrón de residuos (P,D,Q): AR(2)I(0)MA(0) S[12]
+  
+##### *NOTA: Como se detectaron patrones estacionales en ambos modelos de ajuste, son SARIMA.*
 
 En esos dos modelos identifiqué la falta de autocorrelación y un comportamiento de *ruido blanco* en los residuales, además de otras pruebas estadísticas que me pertimió dar como "adecuados" ambos modelos para el pronóstico. Ya que los modelos son adecuados, entonces pronostiqué los valores del INPC General para el año 2018, con el objeto de contrastarlos con los valores reales del INPC General de ese mismo año y así obtener una vista de qué tan bien pronostican ambos modelos. Teniendo los valores pronosticados realicé un *data.frame* en R y lo exporté a Excel, para calcular y graficar la tasa de crecimiento* mensual inmediata de los datos del INPC General, tanto para los datos observados (valores reales del INPC General) como para los pronosticados por el Modelo 1 y el Modelo 2.
 
