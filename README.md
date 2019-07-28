@@ -15,7 +15,7 @@ yo tengo instalado ***Visual Studio Code***; estando dentro del IDE generas un n
 ese código se encuentra codificado en UTF-8, por lo que los acentos y caracteres latinoamericanos aparecerán con un signo de 
 interrogación **"?"**.
 
-Para evitar que ese signo sustituya los caracteres latinos vas a la parte inferior derecha del IDE, en mi caso
+Para evitar que ese signo sustituya los caracteres latinos; vas a la parte inferior derecha del IDE, en mi caso
 Visual Studio Code, y das click en el botón de selección de codificación; ***[UTF-8]***, se abrirá una lista de opciones
 de esa lista seleccionas *"Save with Encoding"* y selecionas la codificación ***Western (ISO 8859-1)***, entonces los 
 signos de interrogación que sustituían a los caracteres latinos desaparecerán y aparecerán los caracteres adecuados.
@@ -34,7 +34,7 @@ Generé dos modelos de ajuste del INPC General y mediante las funciones de autoc
 
 En esos dos modelos identifiqué la falta de autocorrelación y un comportamiento de *ruido blanco* en los residuales, además de otras pruebas estadísticas que me pertimió dar como "adecuados" ambos modelos para el pronóstico. Ya que los modelos son adecuados, entonces pronostiqué los valores del INPC General para el año 2018, con el objeto de contrastarlos con los valores reales del INPC General de ese mismo año y así obtener una vista de qué tan bien pronostican ambos modelos. Teniendo los valores pronosticados realicé un *data.frame* en R y lo exporté a Excel, para calcular y graficar la tasa de crecimiento* mensual inmediata de los datos del INPC General, tanto para los datos observados (valores reales del INPC General) como para los pronosticados por el Modelo 1 y el Modelo 2.
 
-El comportamiento de la inflación observada y del pronóstico de la misma, realizada por los dos modelos de ajuste, se observa en la gráfica 1:
+El comportamiento de la inflación observada y del pronóstico de la misma realizada por los dos modelos de ajuste, se observa en la gráfica 1:
 ##                                             Gráfica 1
 <img src="https://github.com/StefanoSoriano/Tesis/blob/master/imágenes/Inflación%20inmediata%202018.png" alt="drawing"/>
 
