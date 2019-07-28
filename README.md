@@ -12,7 +12,7 @@ se selecciona todo el texto con Ctrl + a, después se copia con Ctrl + c.
 
 Después de descargar te recomiendo que tengas instalado en tu computador un **IDE** ***(Entorno de Desarrollo Integrado)***, 
 yo tengo instalado ***Visual Studio Code***; estando dentro del IDE generas un nuevo archivo HTML, y ahí pegas el código HTML,
-ese código se encuentra codificado en *UTF-8*, por lo que los acentos y caracteres latinoamericanos aparecerán con un signo de 
+ese código se encuentra codificado en UTF-8, por lo que los acentos y caracteres latinoamericanos aparecerán con un signo de 
 interrogación **"?"**.
 
 Para evitar que ese signo sustituya los caracteres latinos vas a la parte inferior derecha del IDE, en mi caso
@@ -27,8 +27,10 @@ ruta del directorio y das doble click al archivo: Reporte de Tesis INPC General,
 
 Generé dos modelos de ajuste del INPC General y mediante las funciones de autocorrelación y autocorrelación parcial obtuve los siguiente patrones ARIMA y patrones estacionales:
 
-  * **Modelo 1** AR(1)I(2)MA(1) junto con el patrón de residuos (P,D,Q): AR(2)I(0)MA(0)
-  * **Modelo 2** AR(6)I(2)MA(6) junto con el patrón de residuos (P,D,Q): AR(2)I(0)MA(0)
+  * **Modelo 1** AR(1)I(2)MA(1) y el patrón de residuos (P,D,Q): AR(2)I(0)MA(0)
+  * **Modelo 2** AR(6)I(2)MA(6) y el patrón de residuos (P,D,Q): AR(2)I(0)MA(0)
+
+Calcul
 
 ##                                           Gráfica 1
 <img src="https://github.com/StefanoSoriano/Tesis/blob/master/imágenes/Inflación%20inmediata%202018.png" alt="drawing"/>
