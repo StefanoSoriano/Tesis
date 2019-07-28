@@ -22,3 +22,15 @@ signos de interrogación que sustituían a los caracteres latinos desaparecerán
 
 Guardas el archivo HTML dentro de un directorio en el computador y lo nombras como *"Reporte de Tesis INPC General"*, vas a la 
 ruta del directorio y das doble click al archivo: Reporte de Tesis INPC General, abrirá una pestaña en tu navegador web predeterminado.
+
+# En cuanto a los resultados del pronóstico:
+
+Generé dos modelos de ajuste del INPC General y mediante las funciones de autocorrelación y autocorrelación parcial obtuve los siguiente patrones ARIMA y patrones estacionales:
+
+  * **Modelo 1** AR(1)I(2)MA(1) junto con el patrón de residuos (P,D,Q): AR(2)I(0)MA(0)
+  * **Modelo 2** AR(6)I(2)MA(6) junto con el patrón de residuos (P,D,Q): AR(2)I(0)MA(0)
+
+##                                           Gráfica 1
+<img src="https://github.com/StefanoSoriano/Tesis/blob/master/imágenes/Inflación%20inmediata%202018.png" alt="drawing"/>
+
+###### Fuente: Elaboración propia con datos del BIE del INEGI.
