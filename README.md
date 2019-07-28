@@ -20,7 +20,7 @@ Visual Studio Code, y das click en el botón de selección de codificación; ***
 de esa lista seleccionas *"Save with Encoding"* y selecionas la codificación ***Western (ISO 8859-1)***, entonces los 
 signos de interrogación que sustituían a los caracteres latinos desaparecerán y aparecerán los caracteres adecuados.
 
-![Visual Studio Code] (StefanoSoriano/Tesis/imágenes/Western iso-8859-1.jpg)
+![Visual Studio Code] (Tesis/imágenes/Western iso-8859-1.jpg)
 
 Guardas el archivo HTML dentro de un directorio en el computador y lo nombras como *"Reporte de Tesis INPC General"*, vas a la 
 ruta del directorio y das doble click al archivo: Reporte de Tesis INPC General, abrirá una pestaña en tu navegador web predeterminado.
