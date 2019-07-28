@@ -16,7 +16,7 @@ ese código se encuentra codificado en UTF-8, por lo que los acentos y caractere
 interrogación **"?"**.
 
 Para evitar que ese signo sustituya los caracteres latinos; vas a la parte inferior derecha del IDE, en mi caso
-Visual Studio Code, y das click en el botón de selección de codificación; ***[UTF-8]***, se abrirá una lista de opciones
+Visual Studio Code, y das click en el botón de selección de codificación; ***[UTF-8]***, se abrirá una lista de opciones,
 de esa lista seleccionas *"Save with Encoding"* y selecionas la codificación ***Western (ISO 8859-1)***, entonces los 
 signos de interrogación que sustituían a los caracteres latinos desaparecerán y aparecerán los caracteres adecuados.
 
