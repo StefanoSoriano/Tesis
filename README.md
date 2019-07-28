@@ -2,7 +2,7 @@
 
 ##### En este proyecto iré subiendo los avances de mi tesis para recibir el grado de Economista, el proyecto es un pronóstico de la inflación de 2019 en México; analizando el INPC General. 
 
-##### Iré reportando los resultados en el archivo *Reporte_del_pronóstico_del_INPC_General.html*.
+##### Iré reportando los resultados en el archivo *Reporte del pronóstico del INPC General.html*.
 
 # En cuanto al reporte:
 
