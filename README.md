@@ -6,6 +6,8 @@
 ##### Para comenzar se instalan las librerías que se van a utilizar
 
 ```r	
+#  La condición if evalúa que la librería no se encuentre dentro de los paquetes instalados, si es verdad, es decir, si la librería en particular no se encuentra dentro de los paquetes instalados se instala.
+
 if (!"astsa" %in% rownames(installed.packages())) {
  install.packages("astsa")
 }
