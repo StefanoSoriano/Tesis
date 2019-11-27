@@ -20,9 +20,9 @@
 ##### Instalar las librerías que se van a utilizar
 
 ```r	
-#######################################
+#|||||||||||||||||||||||||
 #  Instalar librerías
-#######################################
+#|||||||||||||||||||||||||
 
 #  La condición if evalúa que la librería no se encuentre dentro de los paquetes instalados, si la condición resulta ser verdad, 
 #  es decir, si la librería en particular no se encuentra dentro de los paquetes instalados se instala.
@@ -55,9 +55,9 @@ if (!"moments" %in% rownames(installed.packages())) {
  install.packages("moments")
 }
 
-#######################################
-#  Cargar librerías
-#######################################
+#|||||||||||||||||||||||||
+#  Cargar librerías                
+#|||||||||||||||||||||||||
 
 library(astsa)
 library(tseries)
@@ -76,8 +76,8 @@ library(moments)
 
 
 ##                                             Gráfica 1
-<img src="https://github.com/StefanoSoriano/Tesis/blob/master/imágenes/Inflación%20inmediata%202018.png" alt="drawing"/>
+<img src="https://github.com/StefanoSoriano" alt="drawing"/>
 
-###### Fuente: Elaboración propia con datos del BIE del INEGI.
+###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
 
 
