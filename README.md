@@ -7,7 +7,7 @@
 
 * ##### Una librería en R se puede entender como un algoritmo que le da instrucciones a R para que realice cálculos, operaciones matemáticas o para que transforme los datos con los que se está trabajando, entre otras instrucciones.
 
-* ##### Para que R "sepa" que los datos a analizar corresponden a una serie de tiempo es necesario escribir en la consola la siguiente función  ts(data = NA, start = 1, end = numeric(), frequency = 1)
+* ##### Para que R "trate" a los datos a analizar como una serie de tiempo es necesario escribir en la consola la siguiente función  `ts(data = NA, start = 1, end = numeric(), frequency = 1)`
 
 ##### Donde:
 * ##### *data* es el nombre de la serie de tiempo
