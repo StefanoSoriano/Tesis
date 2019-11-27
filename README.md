@@ -1,7 +1,7 @@
 # Pronóstico de la inflación en México, 2019-2020, a través del Índice Nacional de Precios al Consumidor (INPC) general. Modelo ARIMA estacional.
 
 #### En este repositorio desarrollaré un modelo predictivo para el pronóstico de la inflación en México a partir de la segunda quincena de julio de 2019 a la primera quincena de julio de 2020, a través de un modelo ARIMA estacional (SARIMA); analizando el INPC general con el lenguaje de programación estadística R. 
-#### La metodología predictiva utilizada es Box-Jenkins para generar un modelo *ARIMA* por sus siglas en inglés *Autoregressive Integrated Moving Average* o modelo Autorregresivo Intregrado de Promedio Móvil.
+#### La metodología utilizada para generar un modelo *SARIMA* por sus siglas en inglés *Seasonal Autoregressive Integrated Moving Average* o, modelo Estacional Autorregresivo Intregrado de Promedio Móvil, es Box-Jenkins .
 
 #### Antes de comenzar a analizar la serie de tiempo es necesario instalar y cargar en RStudio las librerías a utilizar y posteriormente crear un objeto de serie de tiempo (ts).
 
