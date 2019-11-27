@@ -5,7 +5,7 @@
 
 #### Antes de comenzar a analizar la serie de tiempo es necesario instalar las librerías a utilizar en RStudio y posteriormente crear un objeto de serie de tiempo (ts).
 
-* ##### Una librería en R se puede entender como un algoritmo que le da instrucciones a R para que realice cálculos, operaciones matemáticas o para que transforme los datos con los que se está trabajando, entre otras instrucciones.
+* ##### Una librería en R se puede entender como un algoritmo que tiene instrucciones y que R ejecutará para que realizar cálculos, operaciones matemáticas o para transformar los datos con los que se está trabajando, entre muchas otras instrucciones.
 
 * ##### Para que R "trate" a los datos a analizar como una serie de tiempo es necesario escribir en la consola la siguiente función  `ts(data = NA, start = 1, end = numeric(), frequency = 1)`
 
@@ -20,7 +20,7 @@
 ##### Instalar las librerías que se van a utilizar
 
 ```r	
-#  La condición if evalúa que la librería no se encuentre dentro de los paquetes instalados, si es verdad, 
+#  La condición if evalúa que la librería no se encuentre dentro de los paquetes instalados, si la condición resulta ser verdad, 
 #  es decir, si la librería en particular no se encuentra dentro de los paquetes instalados se instala.
 
 if (!"astsa" %in% rownames(installed.packages())) {
