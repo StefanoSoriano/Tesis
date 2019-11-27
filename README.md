@@ -3,9 +3,9 @@
 #### En este repositorio desarrollaré un modelo predictivo para el pronóstico de la inflación en México a partir de la segunda quincena de julio de 2019 a la primera quincena de julio de 2020, a través de un modelo ARIMA estacional (SARIMA); analizando el INPC general con el lenguaje de programación estadística R. 
 #### La metodología utilizada para generar un modelo *SARIMA* por sus siglas en inglés *Seasonal Autoregressive Integrated Moving Average* o, modelo Estacional Autorregresivo Intregrado de Promedio Móvil, es Box-Jenkins .
 
-#### Antes de comenzar a analizar la serie de tiempo es necesario instalar y cargar en RStudio las librerías a utilizar y posteriormente crear un objeto de serie de tiempo (ts).
+#### Antes de comenzar a analizar la serie de tiempo es necesario instalar y cargar en RStudio las librerías a utilizar, importar los datos del INPC general almacenados en el directorio y posteriormente crear un objeto de serie de tiempo (ts).
 
-* ##### Una librería en R se puede entender como un algoritmo que contiene instrucciones (R ejecutará cada línea de instrucción de manera descendente) para realizar cálculos estadísticos, operaciones matemáticas o, para transformar los datos con los que se está trabajando, entre muchas otras instrucciones.
+* ##### Una librería en R se puede entender como un conjunto de funciones en la que cada función es un bloque de código formado por varias líneas (instrucciones) que R ejecutará, una por una de manera descendente, para realizar cálculos estadísticos, operaciones matemáticas o, para transformar los datos con los que se está trabajando, entre muchas otras instrucciones.
 
 * ##### Para que R "trate" a los datos a analizar como una serie de tiempo es necesario escribir en la consola la siguiente función:  `ts(data = NA, start = 1, end = numeric(), frequency = 1)`
 
@@ -55,6 +55,10 @@ if (!"zoo" %in% rownames(installed.packages())) {
 if (!"moments" %in% rownames(installed.packages())) {
  install.packages("moments")
 }
+if (!"RCurl" %in% rownames(installed.packages())) {
+ install.packages("RCurl")
+}
+
 
 #|||||||||||||||||||||||||
 #  Cargar librerías                
@@ -68,11 +72,31 @@ library(stats)
 library(zoo)
 library(ggplot2)
 library(moments)
+library(RCurl)
+
+#||||||||||||||||||||||||||||||||||
+#  Importar datos del INPC general 
+#   Desde repositorio en GitHub
+#||||||||||||||||||||||||||||||||||
+
+
+GitHubPath <- "https://github.com/StefanoSoriano/Tesis/blob/master/" #  Ruta del repositorio en GitHub
+nameSerie <- "INPC General.csv" #  Nombre del dataset
+INPC_URL <- paste0(GitHubPath, nameSerie) #  URL del repositorio donde está almacenado el dataset
+
+INPC <- getURL(INPC_URL) # Obtener URL del dataset
+INPC <- read.csv(text = INPC, header = T, dec = '.', na.strings = "NA",stringsAsFactors = FALSE) 
+
+#||||||||||||||||||||||||||||||||||||||
+#  Crear objeto de serie de tiempo (ts) 
+#||||||||||||||||||||||||||||||||||||||
+ 
+INPC <- ts(INPC, start = c(1, 2019), frequency = 24) 
 
 ```
 
 
-# Graficando la serie en su forma de niveles
+#### Graficando la serie en su forma de niveles
 
 
 
