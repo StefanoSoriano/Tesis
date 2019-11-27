@@ -5,9 +5,9 @@
 
 #### Antes de comenzar a analizar la serie de tiempo es necesario instalar las librerías a utilizar en RStudio y posteriormente crear un objeto de serie de tiempo (ts).
 
-###### *  Una librería en R se puede entender como un algoritmo que le da instrucciones a R para que realice cálculos, operaciones matemáticas o para que transforme los datos con los que se está trabajando, entre otras instrucciones.
+* ##### Una librería en R se puede entender como un algoritmo que le da instrucciones a R para que realice cálculos, operaciones matemáticas o para que transforme los datos con los que se está trabajando, entre otras instrucciones.
 
-###### *  Para que R "sepa" que los datos a analizar corresponden a una serie de tiempo es necesario escribir en la consola la siguiente función  ts(data = NA, start = 1, end = numeric(), frequency = 1)
+* ##### Para que R "sepa" que los datos a analizar corresponden a una serie de tiempo es necesario escribir en la consola la siguiente función  ts(data = NA, start = 1, end = numeric(), frequency = 1)
 
 ##### Donde:
 * ##### *data* es el nombre de la serie de tiempo
@@ -15,7 +15,7 @@
 * ##### *end* es el año final de la serie de tiempo
 * ##### *frequency* es la periodicidad de la serie de tiempo, en este caso la periodicidad es quincenal
 
-###### Para mayor información de la función *ts* visitar [ts rdocumentation](https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/ts)
+###### Para mayor información de la función *ts*, visitar [ts rdocumentation](https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/ts)
 
 ##### Instalar las librerías que se van a utilizar
 
