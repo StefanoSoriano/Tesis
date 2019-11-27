@@ -3,11 +3,11 @@
 #### En este repositotio desarrollaré un modelo predictivo para el pronóstico de la inflación en México a partir de la segunda quincena de julio 2019 a la primera quicena de julio 2020; analizando el INPC general quincenal con el lenguaje de programación estadística R. 
 #### La metodología predictiva utilizada es Box-Jenkins para generar un modelo *ARIMA* por sus siglas en inglés *Autoregressive Integrated Moving Average* o modelo Autorregresivo Intregrado de Promedio Móvil.
 
-#### Antes de comenzar a analizar la serie de tiempo es necesario instalar las librerías a utilizar en RStudio y posteriormente crear un objeto de serie de tiempo (ts).
+#### Antes de comenzar a analizar la serie de tiempo es necesario instalar y cargar en RStudio las librerías a utilizar y posteriormente crear un objeto de serie de tiempo (ts).
 
 * ##### Una librería en R se puede entender como un algoritmo que tiene instrucciones y que R ejecutará para que realizar cálculos, operaciones matemáticas o para transformar los datos con los que se está trabajando, entre muchas otras instrucciones.
 
-* ##### Para que R "trate" a los datos a analizar como una serie de tiempo es necesario escribir en la consola la siguiente función  `ts(data = NA, start = 1, end = numeric(), frequency = 1)`
+* ##### Para que R "trate" a los datos a analizar como una serie de tiempo es necesario escribir en la consola la siguiente función:  `ts(data = NA, start = 1, end = numeric(), frequency = 1)`
 
 ##### Donde:
 * ##### *data* es el nombre de la serie de tiempo
@@ -20,6 +20,10 @@
 ##### Instalar las librerías que se van a utilizar
 
 ```r	
+#######################################
+#  Instalar librerías
+#######################################
+
 #  La condición if evalúa que la librería no se encuentre dentro de los paquetes instalados, si la condición resulta ser verdad, 
 #  es decir, si la librería en particular no se encuentra dentro de los paquetes instalados se instala.
 
@@ -50,7 +54,20 @@ if (!"zoo" %in% rownames(installed.packages())) {
 if (!"moments" %in% rownames(installed.packages())) {
  install.packages("moments")
 }
-		
+
+#######################################
+#  Cargar librerías
+#######################################
+
+library(astsa)
+library(tseries)
+library(timeSeries)
+library(fGarch)
+library(stats)
+library(zoo)
+library(ggplot2)
+library(moments)
+
 ```
 
 
