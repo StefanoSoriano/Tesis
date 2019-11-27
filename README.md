@@ -3,7 +3,21 @@
 #### En este repositotio desarrollaré un modelo predictivo para el pronóstico de la inflación en México a partir de la segunda quincena de julio 2019 a la primera quicena de julio 2020; analizando el INPC general quincenal con el lenguaje de programación estadística R. 
 #### La metodología predictiva utilizada es Box-Jenkins para generar un modelo *ARIMA* por sus siglas en inglés *Autoregressive Integrated Moving Average* o modelo Autorregresivo Intregrado de Promedio Móvil.
 
-##### Para comenzar se instalan las librerías que se van a utilizar
+#### Antes de comenzar a analizar la serie de tiempo es necesario instalar las librerías a utilizar en RStudio y posteriormente crear un objeto de serie de tiempo (ts).
+
+###### *  Una librería en R se puede entender como un algoritmo que le da instrucciones a R para que realice cálculos, operaciones matemáticas o para que transforme los datos con los que se está trabajando, entre otras instrucciones.
+
+###### *  Para que R "sepa" que los datos a analizar corresponden a una serie de tiempo es necesario escribir en la consola la siguiente función  ts(data = NA, start = 1, end = numeric(), frequency = 1)
+
+##### Donde:
+* ##### *data* es el nombre de la serie de tiempo
+* ##### *start* es el año de inicio de la serie de tiempo
+* ##### *end* es el año final de la serie de tiempo
+* ##### *frequency* es la periodicidad de la serie de tiempo, en este caso la periodicidad es quincenal
+
+###### Para mayor información de la función *ts* visitar [ts rdocumentation](https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/ts)
+
+##### Instalar las librerías que se van a utilizar
 
 ```r	
 #  La condición if evalúa que la librería no se encuentre dentro de los paquetes instalados, si es verdad, 
