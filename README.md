@@ -17,7 +17,7 @@
 
 ###### Para mayor información de la función *ts*, visitar [ts rdocumentation](https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/ts)
 
-##### Instalar las librerías que se van a utilizar
+##### El siguiente bloque de código se ejecuta en la consola de RStudio o en algún otro Ambiente Integrado de Desarrollo (IDE) para R:
 
 ```r	
 #|||||||||||||||||||||||||
