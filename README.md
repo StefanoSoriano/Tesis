@@ -137,7 +137,7 @@ INPC <- ts(INPC, start = c(1, 2019), frequency = 24)
 ###### Fuente: Elaboración propia en Excel con datos del INPC observado y pronosticado
 
 ##                                             Gráfica 8
-<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Pron%C3%B3stico%20del%20INPC.jpg?raw=true" alt="drawing"/>
+<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Pron%C3%B3stico%20del%20INPC.jpg?raw=true"/>
 
 ###### Fuente: Elaboración propia en Excel con datos del INPC pronosticado
 
