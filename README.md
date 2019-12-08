@@ -134,12 +134,12 @@ INPC <- ts(INPC, start = c(1, 2019), frequency = 24)
 ##                                             Gráfica 7
 <img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Simulaci%C3%B3n.jpg?raw=true" alt="drawing"/>
 
-###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
+###### Fuente: Elaboración propia en Excel con datos del INPC observado y pronosticado
 
 ##                                             Gráfica 8
 <img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Pron%C3%B3stico%20del%20INPC.jpg?raw=true" alt="drawing"/>
 
-###### Fuente: Elaboración propia en Excel con datos del INPC observado y pronosticado
+###### Fuente: Elaboración propia en Excel con datos del INPC pronosticado
 
 
 ##                                             Gráfica 9
