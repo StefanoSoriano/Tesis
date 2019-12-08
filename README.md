@@ -15,7 +15,7 @@
 * ##### *end* es el año final de la serie de tiempo
 * ##### *frequency* es la periodicidad de la serie de tiempo, en este caso la periodicidad es quincenal
 
-###### Para mayor información de la función *ts*, visitar [ts rdocumentation](https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/ts)
+###### Para mayor información de la función *ts*, visitar: [ts rdocumentation](https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/ts)
 
 ##### El siguiente bloque de código se ejecuta en la consola de RStudio o en algún otro Ambiente Integrado de Desarrollo (IDE) para R:
 
@@ -121,8 +121,13 @@ INPC <- ts(INPC, start = c(1, 2019), frequency = 24)
 
 ###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
 
-##                                             Gráfica 4
-<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Medidas%20de%20precisi%C3%B3n.png?raw=true" alt="drawing"/>
+##                                             Gráfica 5
+<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Exactitud.jpg?raw=true" alt="drawing"/>
+
+###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
+
+##                                             Gráfica 6
+<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Exactitud.jpg?raw=true" alt="drawing"/>
 
 ###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
 
