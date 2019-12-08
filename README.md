@@ -101,17 +101,17 @@ INPC <- ts(INPC, start = c(1, 2019), frequency = 24)
 
 
 ##                                             Gráfica 1
-<img src="https://github.com/StefanoSoriano/Tesis/blob/master/im%C3%A1genes/INPC%20general%20(niveles).png?raw=true" alt="drawing"/>
+<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/INPC%20general%20(niveles).jpg?raw=true" alt="drawing"/>
 
 ###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
 
 ##                                             Gráfica 2
-<img src="https://github.com/StefanoSoriano/Tesis/blob/master/im%C3%A1genes/Primeras%20diferencias.jpg?raw=true" alt="drawing"/>
+<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Primeras%20diferencias.jpg?raw=true" alt="drawing"/>
 
 ###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
 
 ##                                             Gráfica 3
-<img src="https://github.com/StefanoSoriano/Tesis/blob/master/im%C3%A1genes/Diferencias%20estacionales.jpg?raw=true" alt="drawing"/>
+<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Diferencias%20estacionales.jpg?raw=true" alt="drawing"/>
 
 ###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
 
