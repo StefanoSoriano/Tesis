@@ -5,7 +5,7 @@
 
 #### Antes de comenzar a analizar la serie de tiempo es necesario instalar y cargar en RStudio las librerías a utilizar, importar los datos del INPC general almacenados en el directorio y posteriormente crear un objeto de serie de tiempo (ts).
 
-* ##### Una librería en R se puede entender como un conjunto de funciones en la que cada función es un bloque de código formado por varias líneas (instrucciones) que R ejecutará, una por una de manera descendente, para realizar cálculos estadísticos, operaciones matemáticas o, para transformar los datos con los que se está trabajando, entre muchas otras instrucciones.
+* ##### Una librería en R se puede entender como un conjunto de funciones en la que cada función es un bloque de código formado por varias líneas (instrucciones) que R ejecutará una por una de manera descendente para realizar cálculos estadísticos, operaciones matemáticas o, para transformar los datos con los que se está trabajando, entre muchas otras instrucciones.
 
 * ##### Para que R "trate" a los datos a analizar como una serie de tiempo es necesario escribir en la consola la siguiente función:  `ts(data = NA, start = 1, end = numeric(), frequency = 1)`
 
@@ -101,7 +101,7 @@ INPC <- ts(INPC, start = c(1, 2019), frequency = 24)
 
 
 ##                                             Gráfica 1
-<img src="https://github.com/StefanoSoriano" alt="drawing"/>
+<img src="https://github.com/StefanoSoriano/Tesis/blob/master/im%C3%A1genes/INPC%20general%20(niveles).png?raw=true" alt="drawing"/>
 
 ###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
 
