@@ -127,7 +127,7 @@ INPC <- ts(INPC, start = c(1, 2019), frequency = 24)
 ###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
 
 ##                                             Gráfica 6
-<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Exactitud.jpg?raw=true" alt="drawing"/>
+<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Akaike%20y%20BIC.jpg?raw=true" alt="drawing"/>
 
 ###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
 
