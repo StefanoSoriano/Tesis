@@ -147,3 +147,7 @@ INPC <- ts(INPC, start = c(1, 2019), frequency = 24)
 
 ###### Fuente: Elaboración propia en Excel con datos del INPC pronosticado
 
+# **Referencias:**
+<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/ORACLE.jpg?raw=true" alt="drawing"/>
+<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Harvard.jpg?raw=true" alt="drawing"/>
+
