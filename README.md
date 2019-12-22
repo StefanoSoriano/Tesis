@@ -147,9 +147,5 @@ INPC <- ts(INPC, start = c(1, 2019), frequency = 24)
 
 ###### Fuente: Elaboración propia en Excel con datos del INPC pronosticado
 
-### **Referencias:**
-##### Dalinina, R. (10 de enero de 2017). *Introduction to Forecasting with ARIMA in R.* Obtenido de Oracle Data Science Blog: https://blogs.oracle.com/datascience/introduction-to-forecasting-with-arima-in-r
-
-##### Irizarry, R. (marzo de 2019). *Data Science: R Basics. Build a foundation in R and learn how to wrangle, analyze, and visualize data.* Obtenido de edX: https://www.edx.org/es/course/data-science-r-basics-2
 
 
