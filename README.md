@@ -22,15 +22,10 @@ ts(data = NA, start = 1, end = numeric(), frequency = 1)
 
 ##### El siguiente bloque de código se ejecuta en la consola de RStudio o en algún otro Ambiente Integrado de Desarrollo (IDE) para R:
 
-```r	
-#|||||||||||||||||||||||||
-#  Instalar librerías
-#|||||||||||||||||||||||||
+####  Instalar librerías
 
-#  La condición if evalúa que la librería no se encuentre dentro de los paquetes instalados, 
-#  si la condición resulta ser verdad, es decir, si la librería en particular no se encuentra 
-#  dentro de los paquetes instalados entonces se instala.
-
+####  La condición if evalúa que la librería no se encuentre dentro de los paquetes instalados, si la condición resulta ser verdad, es decir, si la librería en particular no se encuentra dentro de los paquetes instalados entonces se instala.
+```r
 if (!"astsa" %in% rownames(installed.packages())) {
  install.packages("astsa")
 }
@@ -61,12 +56,11 @@ if (!"moments" %in% rownames(installed.packages())) {
 if (!"RCurl" %in% rownames(installed.packages())) {
  install.packages("RCurl")
 }
+```
 
+####  Cargar librerías                
 
-#|||||||||||||||||||||||||
-#  Cargar librerías                
-#|||||||||||||||||||||||||
-
+```r
 library(astsa)
 library(tseries)
 library(timeSeries)
@@ -76,26 +70,24 @@ library(zoo)
 library(ggplot2)
 library(moments)
 library(RCurl)
+```
 
-#||||||||||||||||||||||||||||||||||
-#  Importar datos del INPC general 
-#   Desde repositorio en GitHub
-#||||||||||||||||||||||||||||||||||
+####  Importar datos del INPC general desde repositorio en GitHub
 
-
+```r
 GitHubPath <- "https://github.com/StefanoSoriano/Tesis/blob/master/" #  Ruta del repositorio en GitHub
 nameSerie <- "INPC General.csv" #  Nombre del dataset
 INPC_URL <- paste0(GitHubPath, nameSerie) #  URL del repositorio donde está almacenado el dataset
 
 INPC <- getURL(INPC_URL) # Obtener URL del dataset
 INPC <- read.csv(text = INPC, header = T, dec = '.', na.strings = "NA",stringsAsFactors = FALSE) 
+```
 
-#||||||||||||||||||||||||||||||||||||||
-#  Crear objeto de serie de tiempo (ts) 
-#||||||||||||||||||||||||||||||||||||||
- 
+####  Crear objeto de serie de tiempo (ts) 
+
+
+```r
 INPC <- ts(INPC, start = c(1, 2019), frequency = 24) 
-
 ```
 
 
