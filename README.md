@@ -22,6 +22,8 @@ ts(data = NA, start = 1, end = numeric(), frequency = 1)
 
 ##### El siguiente bloque de código se ejecuta en la consola de RStudio o en algún otro Ambiente Integrado de Desarrollo (IDE) para R:
 
+# Inicio
+
 ####  Instalar librerías
 
 ####  La condición if evalúa que la librería no se encuentre dentro de los paquetes instalados, si la condición resulta ser verdad, es decir, si la librería en particular no se encuentra dentro de los paquetes instalados entonces se instala.
@@ -80,7 +82,7 @@ nameSerie <- "INPC General.csv" #  Nombre del dataset
 INPC_URL <- paste0(GitHubPath, nameSerie) #  URL del repositorio donde está almacenado el dataset
 
 INPC <- getURL(INPC_URL) # Obtener URL del dataset
-INPC <- read.csv(text = INPC, header = T, dec = '.', na.strings = "NA",stringsAsFactors = FALSE) 
+INPC <- read.csv(text = INPC, header = TRUE, dec = '.', na.strings = "NA",stringsAsFactors = FALSE) 
 ```
 
 ####  Crear objeto de serie de tiempo (ts) 
