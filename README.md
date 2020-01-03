@@ -20,9 +20,9 @@ ts(data = NA, start = 1, end = numeric(), frequency = 1)
 
 ###### Para mayor información de la función *ts*, visitar: [ts rdocumentation](https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/ts)
 
-##### El siguiente bloque de código se ejecuta en la consola de RStudio o en algún otro Ambiente Integrado de Desarrollo (IDE) para R:
 
 # Inicio
+##### Los siguientes bloques de código se ejecutan en la consola de RStudio o en algún otro Ambiente Integrado de Desarrollo (IDE) para R.
 
 ####  Instalar librerías
 
