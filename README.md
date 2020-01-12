@@ -142,5 +142,10 @@ INPC <- ts(INPC, start = c(1, 2019), frequency = 24)
 
 ###### Fuente: Elaboración propia en Excel con datos del INPC pronosticado
 
+## Seguimiento del comportamiento del INPC general y de la inflación
+
+###### Fecha y hora de consulta: 12 de enero del 2020 a las 03:07 pm
+<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Seguimiento.jpg" alt="drawing"/>
+###### Fuente: Elaboración propia en Excel con datos del INPC pronosticado e INPC observado
 
 
