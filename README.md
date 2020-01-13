@@ -180,61 +180,32 @@ n_diff_x <- forecast::ndiffs(var_x, test = c("adf"))
 
 ## Seguimiento del comportamiento del INPC general y de la inflación
 
-|	Período	|	INPC Pronosticado	|	INPC Observado	|  
-|	----------	|	----------	|	----------	|
-|	2Q julio 2019	|	103.79	|	103.72	|
-|	1Q agosto 2019	|	104.05	|	103.642	|
-|	2Q agosto 2019	|	104.19	|	103.697	|
-|	1Q septiembre 2019	|	104.52	|	103.877	|
-|	2Q septiembre 2019	|	104.55	|	104.007	|
-|	1Q octubre 2019	|	105.02	|	104.42	|
-|	2Q octubre 2019	|	105.14	|	104.587	|
-|	1Q noviembre 2019	|	105.84	|	105.299	|
-|	2Q noviembre2019	|	105.90	|	105.393	|
-|	1Q diciembre2019	|	106.29	|	105.763	|
-|	2Q diciembre 2019	|	106.48	|	106.105	|
-|	1Q enero 2020	|	106.88	|		|
-|	2Q enero 2020	|	107.10	|		|
-|	1Q febrero 2020	|	107.27	|		|
-|	2Q febrero 2020	|	107.37	|		|
-|	1Q marzo 2020	|	107.62	|		|
-|	2Q marzo 2020	|	107.78	|		|
-|	1Q abri 2020	|	107.55	|		|
-|	2Q abril 2020	|	107.61	|		|
-|	1Q mayo 2020	|	107.26	|		|
-|	2Q mayo 2020	|	107.39	|		|
-|	1Q junio 2020	|	107.49	|		|
-|	2Q junio 2020	|	107.58	|		|
-|	1Q julio 2020	|	107.82	|		|
-
-
-|	Período	|	Inflación Pronosticada	|	Inflación Observada	|
-|	----------	|	----------	|	----------	|
-|	2Q julio 2019	|	3.79%	|	3.72%	|
-|	1Q agosto 2019	|	3.70%	|	3.29%	|
-|	2Q agosto 2019	|	3.53%	|	3.04%	|
-|	1Q septiembre 2019	|	3.62%	|	2.99%	|
-|	2Q septiembre 2019	|	3.55%	|	3.01%	|
-|	1Q octubre 2019	|	3.60%	|	3.01%	|
-|	2Q octubre 2019	|	3.58%	|	3.03%	|
-|	1Q noviembre 2019	|	3.63%	|	3.10%	|
-|	2Q noviembre2019	|	3.34%	|	2.85%	|
-|	1Q diciembre2019	|	3.15%	|	2.63%	|
-|	2Q diciembre 2019	|	3.38%	|	3.02%	|
-|	1Q enero 2020	|	3.66%	|		|
-|	2Q enero 2020	|	3.86%	|		|
-|	1Q febrero 2020	|	4.14%	|		|
-|	2Q febrero 2020	|	4.10%	|		|
-|	1Q marzo 2020	|	4.06%	|		|
-|	2Q marzo 2020	|	4.10%	|		|
-|	1Q abri 2020	|	3.91%	|		|
-|	2Q abril 2020	|	3.91%	|		|
-|	1Q mayo 2020	|	3.88%	|		|
-|	2Q mayo 2020	|	4.05%	|		|
-|	1Q junio 2020	|	4.13%	|		|
-|	2Q junio 2020	|	4.07%	|		|
-|	1Q julio 2020	|	4.01%	|		|
-
+|	Período	|	INPC Pronosticado	|	INPC Observado	|  	Inflación Pronosticada	|	Inflación Observada	|
+|	----------	|	----------	|	----------	|	----------	|	----------	|
+|	2Q julio 2019	|	103.79	|	103.72	|	3.79%	|	3.72%	|
+|	1Q agosto 2019	|	104.05	|	103.642	|	3.70%	|	3.29%	|
+|	2Q agosto 2019	|	104.19	|	103.697	|	3.53%	|	3.04%	|
+|	1Q septiembre 2019	|	104.52	|	103.877	|	3.62%	|	2.99%	|
+|	2Q septiembre 2019	|	104.55	|	104.007	|	3.55%	|	3.01%	|
+|	1Q octubre 2019	|	105.02	|	104.42	|	3.60%	|	3.01%	|
+|	2Q octubre 2019	|	105.14	|	104.587	|	3.58%	|	3.03%	|
+|	1Q noviembre 2019	|	105.84	|	105.299	|	3.63%	|	3.10%	|
+|	2Q noviembre2019	|	105.90	|	105.393	|	3.34%	|	2.85%	|
+|	1Q diciembre2019	|	106.29	|	105.763	|	3.15%	|	2.63%	|
+|	2Q diciembre 2019	|	106.48	|	106.105	|	3.38%	|	3.02%	|
+|	1Q enero 2020	|	106.88	|		|	3.66%	|		|
+|	2Q enero 2020	|	107.10	|		|	3.86%	|		|
+|	1Q febrero 2020	|	107.27	|		|	4.14%	|		|
+|	2Q febrero 2020	|	107.37	|		|	4.10%	|		|
+|	1Q marzo 2020	|	107.62	|		|	4.06%	|		|
+|	2Q marzo 2020	|	107.78	|		|	4.10%	|		|
+|	1Q abri 2020	|	107.55	|		|	3.91%	|		|
+|	2Q abril 2020	|	107.61	|		|	3.91%	|		|
+|	1Q mayo 2020	|	107.26	|		|	3.88%	|		|
+|	2Q mayo 2020	|	107.39	|		|	4.05%	|		|
+|	1Q junio 2020	|	107.49	|		|	4.13%	|		|
+|	2Q junio 2020	|	107.58	|		|	4.07%	|		|
+|	1Q julio 2020	|	107.82	|		|	4.01%	|		|
 
 
 ###### Fecha y hora de consulta: 12 de enero del 2020 a las 03:07 pm
