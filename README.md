@@ -102,10 +102,10 @@ INPC <- ts(INPC, start = c(1, 2019), frequency = 24)
 
 #### La Gráfica 1 muestra la evolución del INPC, se distingue la tendencia creciente determinista y la falta de estacionariedad en media; debido a que las observaciones no tienen una trayectoria alrededor de su valor promedio, es decir, la media de las observaciones de la serie de tiempo cambia a lo largo del periodo, se descartó falta de estacionariedad en varianza debido a que, mientras aumenta el periodo, la varianza de las observa-ciones no cambia a lo largo del tiempo, para corroborar que se necesita diferenciar la serie de tiempo y estabilizar su varianza.
 
-####  Para corroborar que se necesita diferenciar la serie de tiempo y estabilizar su varianza se aplicó a las observaciones la prueba Augmented Dickey-Fuller (adf.test), esta prueba tiene como hipótesis nula (H<sub>_0</sub>) la no estacionariedad de la serie y como hipótesis alternativa (H<sub>_a</sub>) la estacionariedad de la serie; formalmente: 
-* #### H<sub>_0</sub>: serie de tiempo no estacionaria (raíz unitaria).
-* #### H<sub>_a</sub>: serie de tiempo estacionaria.
-#### Para rechazar la H<sub>_0</sub> frente a la H<sub>_a</sub>, el valor p tiene que ser menor que 0.05; de lo contrario, se acepta la H<sub>_0</sub> frente a la H<sub>_a</sub> y se aplican las primeras diferencias a la serie.
+####  Para corroborar que se necesita diferenciar la serie de tiempo y estabilizar su varianza se aplicó a las observaciones la prueba Augmented Dickey-Fuller (adf.test), esta prueba tiene como hipótesis nula (H<sub>0</sub>) la no estacionariedad de la serie y como hipótesis alternativa (H<sub>a</sub>) la estacionariedad de la serie; formalmente: 
+* #### H<sub>0</sub>: serie de tiempo no estacionaria (raíz unitaria).
+* #### H<sub>a</sub>: serie de tiempo estacionaria.
+#### Para rechazar la H<sub>0</sub> frente a la H<sub>a</sub>, el valor p tiene que ser menor que 0.05; de lo contrario, se acepta la H<sub>0</sub> frente a la H<sub>a</sub> y se aplican las primeras diferencias a la serie.
 
 ```r
 test.raiz <- adf.test(var_x)
