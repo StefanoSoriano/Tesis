@@ -98,6 +98,32 @@ INPC <- ts(INPC, start = c(1, 2019), frequency = 24)
 ##                                             Gráfica 1
 <img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/INPC%20general%20(niveles).jpg?raw=true" alt="drawing"/>
 
+####  Para corroborar que se necesita diferenciar la serie de tiempo y estabilizar su varianza se aplicó a las observaciones la prueba Augmented Dickey-Fuller (adf.test)  en el programa estadístico «R», esta prueba tiene como hipótesis nula (H_0) la no estacionariedad de la serie y como hipótesis alternativa (H_a) la estacionariedad de la serie; formalmente: 
+* H_0: serie de tiempo no estacionaria (raíz unitaria).
+* H_a: serie de tiempo estacionaria.
+#### Para rechazar la H_0 frente a la H_a, el valor p tiene que ser menor que 0.05; de lo contrario, se acepta la H_0 frente a la H_a y se aplican las primeras diferencias a la serie.
+
+```r
+test.raiz <- adf.test(var_x)
+options(digits=2) 
+if (test.raiz$p.value < 0.05)
+{
+valor <- test.raiz$p.value  
+    cat("No hay Raíz unitaria (serie de tiempo estacionaria) el valor p es: ", valor,   
+        "\npor lo tanto, se rechaza la H0 de no estacionariedad.",
+         "\nSe puede entonces calcular el modelo de ajuste.")
+} else {
+ valor <- test.raiz$p.value
+    cat("Raíz unitaria (serie de tiempo no estacionaria) el valor p es: " , valor,
+         
+        "\nDebido a que la serie no es estacionaria entonces se estabiliza la serie de tiempo",
+ "\nantes de estimar el modelo.");     
+n_diff_x <- forecast::ndiffs(var_x, test = c("adf"))
+    var_diff_x <- diff(var_x, n_diff_x)
+ }    
+}
+```
+### El resultado de la prueba ADF fue el siguiente:
 ###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
 
 ##                                             Gráfica 2
