@@ -180,6 +180,60 @@ n_diff_x <- forecast::ndiffs(var_x, test = c("adf"))
 
 ## Seguimiento del comportamiento del INPC general y de la inflación
 
+|	Período	|	INPC Pronosticado	|	INPC Observado	|
+|	----------	|	----------	|	----------	|
+|	2Q julio 2019	|	103.7919642	|	103.72	|
+|	1Q agosto 2019	|	104.0531138	|	103.642	|
+|	2Q agosto 2019	|	104.1903145	|	103.697	|
+|	1Q septiembre 2019	|	104.5208368	|	103.877	|
+|	2Q septiembre 2019	|	104.5537575	|	104.007	|
+|	1Q octubre 2019	|	105.02465	|	104.42	|
+|	2Q octubre 2019	|	105.1449032	|	104.587	|
+|	1Q noviembre 2019	|	105.8441826	|	105.299	|
+|	2Q noviembre2019	|	105.8953666	|	105.393	|
+|	1Q diciembre2019	|	106.2916684	|	105.763	|
+|	2Q diciembre 2019	|	106.477813	|	106.105	|
+|	1Q enero 2020	|	106.8792739	|		|
+|	2Q enero 2020	|	107.0965773	|		|
+|	1Q febrero 2020	|	107.2732472	|		|
+|	2Q febrero 2020	|	107.3740266	|		|
+|	1Q marzo 2020	|	107.6173745	|		|
+|	2Q marzo 2020	|	107.7822552	|		|
+|	1Q abri 2020	|	107.5507752	|		|
+|	2Q abril 2020	|	107.6063349	|		|
+|	1Q mayo 2020	|	107.2596598	|		|
+|	2Q mayo 2020	|	107.3936423	|		|
+|	1Q junio 2020	|	107.4853796	|		|
+|	2Q junio 2020	|	107.5817518	|		|
+|	1Q julio 2020	|	107.8154405	|		|
+
+|	Período	|	Inflación Pronosticada	|	Inflación Observada	|
+|	----------	|	----------	|	----------	|
+|	2Q julio 2019	|	3.79%	|	3.72%	|
+|	1Q agosto 2019	|	3.70%	|	3.29%	|
+|	2Q agosto 2019	|	3.53%	|	3.04%	|
+|	1Q septiembre 2019	|	3.62%	|	2.99%	|
+|	2Q septiembre 2019	|	3.55%	|	3.01%	|
+|	1Q octubre 2019	|	3.60%	|	3.01%	|
+|	2Q octubre 2019	|	3.58%	|	3.03%	|
+|	1Q noviembre 2019	|	3.63%	|	3.10%	|
+|	2Q noviembre2019	|	3.34%	|	2.85%	|
+|	1Q diciembre2019	|	3.15%	|	2.63%	|
+|	2Q diciembre 2019	|	3.38%	|	3.02%	|
+|	1Q enero 2020	|	3.66%	|		|
+|	2Q enero 2020	|	3.86%	|		|
+|	1Q febrero 2020	|	4.14%	|		|
+|	2Q febrero 2020	|	4.10%	|		|
+|	1Q marzo 2020	|	4.06%	|		|
+|	2Q marzo 2020	|	4.10%	|		|
+|	1Q abri 2020	|	3.91%	|		|
+|	2Q abril 2020	|	3.91%	|		|
+|	1Q mayo 2020	|	3.88%	|		|
+|	2Q mayo 2020	|	4.05%	|		|
+|	1Q junio 2020	|	4.13%	|		|
+|	2Q junio 2020	|	4.07%	|		|
+|	1Q julio 2020	|	4.01%	|		|
+
 ###### Fecha y hora de consulta: 12 de enero del 2020 a las 03:07 pm
 
 <img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Seguimiento.jpg" alt="drawing"/>
