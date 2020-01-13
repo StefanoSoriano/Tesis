@@ -1,5 +1,5 @@
 # Pronóstico de la inflación en México, 2019-2020, a través del Índice Nacional de Precios al Consumidor (INPC) general. Modelo ARIMA estacional.
-
+ 
 #### En este repositorio desarrollaré un modelo predictivo para el pronóstico de la inflación en México a partir de la segunda quincena de julio de 2019 a la primera quincena de julio de 2020, a través de un modelo ARIMA estacional (SARIMA); analizando el INPC general con el lenguaje de programación estadística R. 
 #### La metodología utilizada para generar un modelo *Seasonal Autoregressive Integrated Moving Average* por sus siglas en inglés *SARIMA* o, modelo Estacional Autorregresivo Intregrado de Promedio Móvil, es Box-Jenkins .
 
@@ -102,10 +102,10 @@ INPC <- ts(INPC, start = c(1, 2019), frequency = 24)
 
 #### La Gráfica 1 muestra la evolución del INPC, se distingue la tendencia creciente determinista y la falta de estacionariedad en media; debido a que las observaciones no tienen una trayectoria alrededor de su valor promedio, es decir, la media de las observaciones de la serie de tiempo cambia a lo largo del periodo, se descartó falta de estacionariedad en varianza debido a que, mientras aumenta el periodo, la varianza de las observa-ciones no cambia a lo largo del tiempo, para corroborar que se necesita diferenciar la serie de tiempo y estabilizar su varianza.
 
-####  Para corroborar que se necesita diferenciar la serie de tiempo y estabilizar su varianza se aplicó a las observaciones la prueba Augmented Dickey-Fuller (adf.test), esta prueba tiene como hipótesis nula (H_0) la no estacionariedad de la serie y como hipótesis alternativa (H_a) la estacionariedad de la serie; formalmente: 
-* #### H_0: serie de tiempo no estacionaria (raíz unitaria).
-* #### H_a: serie de tiempo estacionaria.
-#### Para rechazar la H_0 frente a la H_a, el valor p tiene que ser menor que 0.05; de lo contrario, se acepta la H_0 frente a la H_a y se aplican las primeras diferencias a la serie.
+####  Para corroborar que se necesita diferenciar la serie de tiempo y estabilizar su varianza se aplicó a las observaciones la prueba Augmented Dickey-Fuller (adf.test), esta prueba tiene como hipótesis nula (H<sub>_0</sub>) la no estacionariedad de la serie y como hipótesis alternativa (H<sub>_a</sub>) la estacionariedad de la serie; formalmente: 
+* #### H<sub>_0</sub>: serie de tiempo no estacionaria (raíz unitaria).
+* #### H<sub>_a</sub>: serie de tiempo estacionaria.
+#### Para rechazar la H<sub>_0</sub> frente a la H<sub>_a</sub>, el valor p tiene que ser menor que 0.05; de lo contrario, se acepta la H<sub>_0</sub> frente a la H<sub>_a</sub> y se aplican las primeras diferencias a la serie.
 
 ```r
 test.raiz <- adf.test(var_x)
@@ -134,7 +134,7 @@ n_diff_x <- forecast::ndiffs(var_x, test = c("adf"))
 ## Debido a que la serie no es estacionaria entonces se estabiliza la serie de tiempo 
 ## antes de estimar el modelo.
 ```
-#### El resultado de la prueba generó un valor p mayor que 0.05, por ello, se acepta la H_0 frente a la H_a y se diferencia una vez la serie de tiempo, se vuelve a aplicar la prueba para comprobar que ya no hay raíz unitaria, antes de ver los resultados de la prueba, se graficó la serie del INPC diferenciada para observar si tiene un comportamiento de ruido blanco: 
+#### El resultado de la prueba generó un valor p mayor que 0.05, por ello, se acepta la H frente a la H<sub>_a</sub> y se diferencia una vez la serie de tiempo, se vuelve a aplicar la prueba para comprobar que ya no hay raíz unitaria, antes de ver los resultados de la prueba, se graficó la serie del INPC diferenciada para observar si tiene un comportamiento de ruido blanco: 
 
 ##                                             Gráfica 2
 <img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Primeras%20diferencias.jpg?raw=true" alt="drawing"/>
