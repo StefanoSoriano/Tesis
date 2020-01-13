@@ -178,8 +178,7 @@ n_diff_x <- forecast::ndiffs(var_x, test = c("adf"))
 
 ###### Fuente: Elaboración propia en Excel con datos del INPC pronosticado
 
-# Seguimiento del comportamiento: 
-# INPC general e inflación
+# Seguimiento del comportamiento: INPC general e inflación
 
 <img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Seguimiento.jpg" alt="drawing"/>
 
