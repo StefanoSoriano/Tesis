@@ -98,11 +98,13 @@ INPC <- ts(INPC, start = c(1, 2019), frequency = 24)
 ##                                             Gráfica 1
 <img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/INPC%20general%20(niveles).jpg?raw=true" alt="drawing"/>
 
+###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
+
 #### La Gráfica 1 muestra la evolución del INPC, se distingue la tendencia creciente determinista y la falta de estacionariedad en media; debido a que las observaciones no tienen una trayectoria alrededor de su valor promedio, es decir, la media de las observaciones de la serie de tiempo cambia a lo largo del periodo, se descartó falta de estacionariedad en varianza debido a que, mientras aumenta el periodo, la varianza de las observa-ciones no cambia a lo largo del tiempo, para corroborar que se necesita diferenciar la serie de tiempo y estabilizar su varianza.
 
 ####  Para corroborar que se necesita diferenciar la serie de tiempo y estabilizar su varianza se aplicó a las observaciones la prueba Augmented Dickey-Fuller (adf.test), esta prueba tiene como hipótesis nula (H_0) la no estacionariedad de la serie y como hipótesis alternativa (H_a) la estacionariedad de la serie; formalmente: 
-* H_0: serie de tiempo no estacionaria (raíz unitaria).
-* H_a: serie de tiempo estacionaria.
+* #### H_0: serie de tiempo no estacionaria (raíz unitaria).
+* #### H_a: serie de tiempo estacionaria.
 #### Para rechazar la H_0 frente a la H_a, el valor p tiene que ser menor que 0.05; de lo contrario, se acepta la H_0 frente a la H_a y se aplican las primeras diferencias a la serie.
 
 ```r
@@ -124,13 +126,15 @@ n_diff_x <- forecast::ndiffs(var_x, test = c("adf"))
     var_diff_x <- diff(var_x, n_diff_x)
  }    
 ```
+
 ### El resultado de la prueba ADF fue el siguiente:
+
 ```r
 ## Raíz unitaria (serie de tiempo no estacionaria) el valor p es:  0.68 
 ## Debido a que la serie no es estacionaria entonces se estabiliza la serie de tiempo 
 ## antes de estimar el modelo.
 ```
-###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
+#### El resultado de la prueba generó un valor p mayor que 0.05, por ello, se acepta la H_0 frente a la H_a y se diferencia una vez la serie de tiempo, se vuelve a aplicar la prueba para comprobar que ya no hay raíz unitaria, antes de ver los resultados de la prueba, se graficó la serie del INPC diferenciada para observar si tiene un comportamiento de ruido blanco: 
 
 ##                                             Gráfica 2
 <img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Primeras%20diferencias.jpg?raw=true" alt="drawing"/>
