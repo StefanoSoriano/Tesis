@@ -76,7 +76,7 @@ library(RCurl)
 
 ```r
 GitHubPath <- "https://github.com/StefanoSoriano/Tesis/blob/master/" #  Ruta del repositorio en GitHub
-nameSerie <- "INPC General.csv" #  Nombre del dataset
+nameSerie <- "INPC general quincenal.csv" #  Nombre del dataset
 INPC_URL <- paste0(GitHubPath, nameSerie) #  URL del repositorio donde está almacenado el dataset
 
 INPC <- getURL(INPC_URL) # Obtener URL del dataset
