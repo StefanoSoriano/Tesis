@@ -134,7 +134,7 @@ n_diff_x <- forecast::ndiffs(var_x, test = c("adf"))
 ## Debido a que la serie no es estacionaria entonces se estabiliza la serie de tiempo 
 ## antes de estimar el modelo.
 ```
-#### El resultado de la prueba generó un valor p mayor que 0.05, por ello, se acepta la H frente a la H<sub>_a</sub> y se diferencia una vez la serie de tiempo, se vuelve a aplicar la prueba para comprobar que ya no hay raíz unitaria, antes de ver los resultados de la prueba, se graficó la serie del INPC diferenciada para observar si tiene un comportamiento de ruido blanco: 
+#### El resultado de la prueba generó un valor p mayor que 0.05, por ello, se acepta la H<sub>0</sub> frente a la H<sub>a</sub> y se diferencia una vez la serie de tiempo, se vuelve a aplicar la prueba para comprobar que ya no hay raíz unitaria, antes de ver los resultados de la prueba, se graficó la serie del INPC diferenciada para observar si tiene un comportamiento de ruido blanco: 
 
 ##                                             Gráfica 2
 <img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Primeras%20diferencias.jpg?raw=true" alt="drawing"/>
