@@ -180,6 +180,14 @@ n_diff_x <- forecast::ndiffs(var_x, test = c("adf"))
 
 ## Seguimiento del comportamiento del INPC general y de la inflación
 
+<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Seguimiento.jpg" alt="drawing"/>
+
+###### Fuente: Elaboración propia en Excel con datos del INPC pronosticado e INPC observado
+
+## Datos del INPC general y de la inflación, período quincenal.
+
+###### Fecha y hora de consulta: 12 de enero del 2020 a las 03:07 pm
+
 |	Período	|	INPC Pronosticado	|	INPC Observado	|  	Inflación Pronosticada	|	Inflación Observada	|
 |	----------	|	----------	|	----------	|	----------	|	----------	|
 |	2Q julio 2019	|	103.79	|	103.72	|	3.79%	|	3.72%	|
@@ -208,10 +216,5 @@ n_diff_x <- forecast::ndiffs(var_x, test = c("adf"))
 |	1Q julio 2020	|	107.82	|		|	4.01%	|		|
 
 
-###### Fecha y hora de consulta: 12 de enero del 2020 a las 03:07 pm
-
-<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Seguimiento.jpg" alt="drawing"/>
-
-###### Fuente: Elaboración propia en Excel con datos del INPC pronosticado e INPC observado
 
 
