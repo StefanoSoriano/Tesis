@@ -121,9 +121,13 @@ valor <- test.raiz$p.value
 n_diff_x <- forecast::ndiffs(var_x, test = c("adf"))
     var_diff_x <- diff(var_x, n_diff_x)
  }    
-}
 ```
 ### El resultado de la prueba ADF fue el siguiente:
+```r
+## Raíz unitaria (serie de tiempo no estacionaria) el valor p es:  0.68 
+## Debido a que la serie no es estacionaria entonces se estabiliza la serie de tiempo 
+## antes de estimar el modelo.
+```
 ###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
 
 ##                                             Gráfica 2
