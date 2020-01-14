@@ -144,6 +144,48 @@ n_diff_x <- forecast::ndiffs(var_x, test = c("adf"))
 
 ###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
 
+#### La Gráfica 2 muestra que las observaciones del INPC diferenciadas tienen una trayectoria alrededor del cero (valor medio de la serie del INPC) y con varianza constante, es decir, es ruido blanco, lo que significa que la serie es estacionaria en varianza, se vue
+```r
+test.raiz <- adf.test(var_diff_x)
+options(digits=2) 
+if (test.raiz$p.value < 0.05)
+{
+valor <- test.raiz$p.value  
+     cat("Serie de tiempo estacionaria el valor p es: ", valor, 
+    "
+por lo tanto, se rechaza la H0 de no estacionariedad.
+Se puede entonces calcular el modelo de ajuste")
+} else {
+ valor <- test.raiz$p.value
+    cat("Serie de tiempo no estacionaria.
+",
+       "Debido a que la serie sigue presentando no estacionariedad",
+       "se calculan las primeras diferencias de la serie",
+        "junto con el rezago de orden 24, el valor p es el siguiente: ")
+    diff_orden <- diff(var_x, lag = 24)
+    test.raiz <- adf.test(diff_orden)
+       options(digits=2) 
+       if (test.raiz$p.value < 0.05)
+       {
+          valor <- test.raiz$p.value  
+          cat(valor, 
+           "
+por lo tanto, la serie es estacionaria. 
+Se puede entonces calcular el modelo de ajuste")
+       } else {
+           cat("Serie de tiempo no estacionaria.")
+         }
+}  
+```
+#### El resultado de la prueba ADF fue:
+
+```r
+## Serie de tiempo estacionaria el valor p es:  0.01 
+## por lo tanto, se rechaza la H0 de no estacionariedad.
+## Se puede entonces calcular el modelo de ajuste
+```
+#### En efecto, el valor p es menor que 0.05, por lo que se rechazó la H<sub>0</sub> de no estacionariedad frente a la H<sub>a</sub> de estacionariedad; como la serie de tiempo es estacionaria, se prosiguió a la fase de identificación de los órdenes ARIMA.
+
 ##                                             Gráfica 3
 <img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Diferencias%20estacionales.jpg?raw=true" alt="drawing"/>
 
