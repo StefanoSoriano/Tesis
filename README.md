@@ -90,7 +90,7 @@ INPC <- read.csv(text = INPC, header = TRUE, dec = '.', na.strings = "NA",string
 
 
 ```r
-INPC <- ts(INPC, start = c(1, 2019), frequency = 24) 
+INPC <- ts(INPC, start = c(1, 1988), frequency = 24) 
 ```
 
 
