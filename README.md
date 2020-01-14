@@ -185,7 +185,7 @@ n_diff_x <- forecast::ndiffs(var_x, test = c("adf"))
 ###### Fuente: Elaboración propia en Excel con datos del INPC pronosticado e INPC observado
 
 ## Datos del INPC general y de la inflación (período quincenal)
-###### *NOTA: El cálculo de la inflación quincenal aquí mostrada es anualizada, el INEGI proporciona el valor de la inflación quincenal inmediata* 
+###### *NOTA: El cálculo de la inflación quincenal mostrada enseguida es anualizada, el INEGI proporciona el valor de la inflación quincenal inmediata.* 
 
 ###### Fecha y hora de consulta: 12 de enero del 2020 a las 03:07 pm
 
