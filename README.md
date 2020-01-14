@@ -216,7 +216,7 @@ n_diff_x <- forecast::ndiffs(var_x, test = c("adf"))
 |	1Q julio 2020	|	107.82	|		|	4.01%	|		|
 
 ###### Fuente: Elaboración propia con datos del BIE del INEGI
-###### [Los datos del INPC general quincenal se pueden consultar en este link](https://www.inegi.org.mx/sistemas/bie/?idserPadre=10000500001500600040)
+###### [Los datos del INPC general quincenal se pueden consultar dando click aquí](https://www.inegi.org.mx/sistemas/bie/?idserPadre=10000500001500600040)
 
 
 
