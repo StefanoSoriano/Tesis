@@ -225,7 +225,7 @@ Se puede entonces calcular el modelo de ajuste")
 
 # Seguimiento al comportamiento del INPC e inflación
 
-<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Seguimiento.jpg" alt="drawing"/>
+<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Seguimiento.png" alt="drawing"/>
 
 ###### Fuente: Elaboración propia en Excel con datos del INPC pronosticado e INPC observado
 
