@@ -232,7 +232,7 @@ Se puede entonces calcular el modelo de ajuste")
 ## Datos del INPC general y de la inflación (período quincenal)
 ###### *NOTA: El cálculo de la inflación quincenal mostrada enseguida es anualizada, el INEGI proporciona el valor de la inflación quincenal inmediata.* 
 
-##### Fecha y hora de consulta: 12 de enero del 2020 a las 03:07 pm
+##### Fecha y hora de consulta: 27 de marzo del 2020 a las 10:34 pm
 
 |	Período	|	INPC Pronosticado	|	INPC Observado	|  	Inflación Pronosticada	|	Inflación Observada	|
 |	----------	|	----------	|	----------	|	----------	|	----------	|
