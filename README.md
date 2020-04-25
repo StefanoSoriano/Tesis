@@ -196,6 +196,8 @@ Se puede entonces calcular el modelo de ajuste")
 <img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Medidas%20de%20precisi%C3%B3n.jpg?raw=true" alt="drawing"/>
 
 ###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
+$$f\left(k\right) = \binom{n}{k} p^k\left(1-p\right)^{n-k}$$ 
+$$MAPE = \frac{1}{n}\sum_{i = 1}^{n}\frac{\left | {A_i} - {F_i} \right |* 100}{{A_i}}$$
 
 ##                                             Gráfica 5
 <img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Exactitud.jpg?raw=true" alt="drawing"/>
