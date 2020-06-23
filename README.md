@@ -396,6 +396,64 @@ cat("Valor MASE:", Valor_MASE_mas_bajo[1,1])
 ```
 ## Medidas de precisión de los modelos de ajuste
 
+```
+setwd(ruta)
+INPC_General <- read.csv('INPC General quincenal.csv', header = TRUE, dec = '.', stringsAsFactors = FALSE)
+INPC <- INPC_General
+INPC <- ts(INPC, start = c(1988, 1), frequency = 24)
+INPC <- INPC[, -1]
+INPC <- zoo::na.approx(INPC)
+INPC <- INPC
+Ajuste_INPC_1 <- arima(INPC, order=c(0,1,0), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
+Ajuste_INPC_2 <- arima(INPC, order=c(1,1,1), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
+Ajuste_INPC_3 <- arima(INPC, order=c(2,1,2), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
+Ajuste_INPC_4 <- arima(INPC, order=c(3,1,3), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
+Ajuste_INPC_5 <- arima(INPC, order=c(4,1,4), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
+Modelo_Ajustado <- c("Ajuste_INPC_1","Ajuste_INPC_2","Ajuste_INPC_3","Ajuste_INPC_4","Ajuste_INPC_5")
+#Patrones_pdq_y_PDQ <- c("(0,1,0) (1,0,0)","(1,1,1) (1,0,0)","(2,1,2) (1,0,0)","(3,1,3) (1,0,0)","(4,1,4) (1,0,0)")
+AIC <- c(Ajuste_INPC_1$aic, Ajuste_INPC_2$aic, Ajuste_INPC_3$aic, Ajuste_INPC_4$aic,Ajuste_INPC_5$aic)
+BIC <- c(BIC(Ajuste_INPC_1), BIC(Ajuste_INPC_2), BIC(Ajuste_INPC_3), BIC(Ajuste_INPC_4),BIC(Ajuste_INPC_5))
+Modelo_Ajustado <- as.data.frame(Modelo_Ajustado)
+#Patrones_pdq_y_PDQ <- cbind(Patrones_pdq_y_PDQ)
+AIC <- as.data.frame(AIC)
+BIC <- as.data.frame(BIC)
+Summary_stat <- cbind(Modelo_Ajustado, AIC, BIC)
+Summary_stat
+# AIC
+index_Summary_stat_Akaike_bajo <- which(Summary_stat[,2] == min(Summary_stat[,2]))
+Akaike_mas_bajo <- cbind(Summary_stat[index_Summary_stat_Akaike_bajo,1])
+Ajuste_Akaike_mas_bajo <- cbind(Summary_stat[index_Summary_stat_Akaike_bajo,2])
+# BIC
+index_Summary_stat_BIC_bajo <- which(Summary_stat[,3] == min(Summary_stat[,3]))
+BIC_mas_bajo <- cbind(Summary_stat[index_Summary_stat_BIC_bajo,1])
+Ajuste_BIC_mas_bajo <- cbind(Summary_stat[index_Summary_stat_BIC_bajo,3])
+cat("Modelo de ajuste con valor Akaike más bajo:", Akaike_mas_bajo[1,1])
+cat("Valor Akaike:", Ajuste_Akaike_mas_bajo[1,1])
+cat("Modelo de ajuste con valor BIC más bajo:", BIC_mas_bajo[1,1])
+cat("Valor BIC:", Ajuste_BIC_mas_bajo[1,1])
+#### Medidas de precisión de los modelos de ajuste
+accuracy_fit_INPC_1 <- forecast::accuracy(Ajuste_INPC_1)
+accuracy_fit_INPC_2 <- forecast::accuracy(Ajuste_INPC_2)
+accuracy_fit_INPC_3 <- forecast::accuracy(Ajuste_INPC_3)
+accuracy_fit_INPC_4 <- forecast::accuracy(Ajuste_INPC_4)
+accuracy_fit_INPC_5 <- forecast::accuracy(Ajuste_INPC_5)
+MAPE <- c(accuracy_fit_INPC_1[5],accuracy_fit_INPC_2[5],accuracy_fit_INPC_3[5],
+accuracy_fit_INPC_4[5],accuracy_fit_INPC_5[5])
+ME <- c(accuracy_fit_INPC_1[1],accuracy_fit_INPC_2[1],accuracy_fit_INPC_3[1],
+accuracy_fit_INPC_4[1],accuracy_fit_INPC_5[1])
+RMSE <- c(accuracy_fit_INPC_1[2],accuracy_fit_INPC_2[2],accuracy_fit_INPC_3[2],
+accuracy_fit_INPC_4[2],accuracy_fit_INPC_5[2])
+MAE <- c(accuracy_fit_INPC_1[3],accuracy_fit_INPC_2[3],accuracy_fit_INPC_3[3],
+accuracy_fit_INPC_4[3],accuracy_fit_INPC_5[3])
+MPE <- c(accuracy_fit_INPC_1[4],accuracy_fit_INPC_2[4],accuracy_fit_INPC_3[4],
+accuracy_fit_INPC_4[4],accuracy_fit_INPC_5[4])
+MASE <- c(accuracy_fit_INPC_1[6],accuracy_fit_INPC_2[6],accuracy_fit_INPC_3[6],
+accuracy_fit_INPC_4[6],accuracy_fit_INPC_5[6])
+Summary_accuracy <- cbind(Modelo_Ajustado, MAPE,ME,RMSE,MAE,MPE,MASE)
+Summary_accuracy
+#Summary_accuracy <- cbind(Modelo_Ajustado,MAPE,ME,RMSE,MAE,MPE,MASE)
+```
+
 ```r
 ## Modelo_Ajustado MAPE ME RMSE MAE MPE MASE
 ## 1 Ajuste_INPC_1 0.20796 0.0094089 0.12484 0.080528 0.043476 0.51007
@@ -403,6 +461,46 @@ cat("Valor MASE:", Valor_MASE_mas_bajo[1,1])
 ## 3 Ajuste_INPC_3 0.15225 0.0030495 0.10821 0.068110 0.014771 0.43142
 ## 4 Ajuste_INPC_4 0.15287 0.0030495 0.10768 0.068239 0.014636 0.43224
 ## 5 Ajuste_INPC_5 0.15120 0.0020802 0.10732 0.067396 0.012158 0.42689
+```
+
+```r
+# Calculando índices para obtener los valores más bajos del resumen estadístico de precisión de los modelos de ajuste
+index_MAPE <- which(Summary_accuracy[,2] == min(Summary_accuracy[,2]))
+MAPE_mas_bajo <- cbind(Summary_accuracy[index_MAPE ,1])
+Valor_MAPE_mas_bajo <- cbind(Summary_accuracy[index_MAPE,2])
+cat("Modelo de ajuste con MAPE más bajo:", MAPE_mas_bajo[1,1])
+cat("Valor MAPE:", Valor_MAPE_mas_bajo[1,1])
+index_ME <- which(Summary_accuracy[,3] == min(Summary_accuracy[,3]))
+ME_mas_bajo <- cbind(Summary_accuracy[index_ME ,1])
+Valor_ME_mas_bajo <- cbind(Summary_accuracy[index_ME,3])
+
+cat("Modelo de ajuste con ME más bajo:", ME_mas_bajo[1,1])
+cat("Valor ME:", Valor_ME_mas_bajo[1,1])
+index_RMSE <- which(Summary_accuracy[,4] == min(Summary_accuracy[,4]))
+RMSE_mas_bajo <- cbind(Summary_accuracy[index_RMSE ,1])
+Valor_RMSE_mas_bajo <- cbind(Summary_accuracy[index_RMSE,4])
+cat("Modelo de ajuste con RMSE más bajo:", RMSE_mas_bajo[1,1])
+cat("Valor RMSE:", Valor_RMSE_mas_bajo[1,1])
+index_MAE <- which(Summary_accuracy[,5] == min(Summary_accuracy[,5]))
+MAE_mas_bajo <- cbind(Summary_accuracy[index_MAE ,1])
+Valor_MAE_mas_bajo <- cbind(Summary_accuracy[index_MAE,5])
+cat("Modelo de ajuste con MAE más bajo:", MAE_mas_bajo[1,1])
+cat("Valor MAE:", Valor_MAE_mas_bajo[1,1])
+index_MPE <- which(Summary_accuracy[,6] == min(Summary_accuracy[,6]))
+MPE_mas_bajo <- cbind(Summary_accuracy[index_MPE ,1])
+Valor_MPE_mas_bajo <- cbind(Summary_accuracy[index_MPE,6])
+cat("Modelo de ajuste con MPE más bajo:", MPE_mas_bajo[1,1])
+cat("Valor MPE:", Valor_MPE_mas_bajo[1,1])
+index_MASE <- which(Summary_accuracy[,7] == min(Summary_accuracy[,7]))
+MASE_mas_bajo <- cbind(Summary_accuracy[index_MASE,1])
+Valor_MASE_mas_bajo <- cbind(Summary_accuracy[index_MASE,7])
+cat("Modelo de ajuste con MASE más bajo:", MASE_mas_bajo[1,1])
+cat("Valor MASE:", Valor_MASE_mas_bajo[1,1])
+
+setwd(ruta_exp)
+write.csv(Summary_accuracy, "Medidas de precisión.csv")
+write.csv(Summary_stat, "AIC BIC.csv")
+setwd(ruta)
 ```
 
 ```r
@@ -432,12 +530,81 @@ cat("Valor MASE:", Valor_MASE_mas_bajo[1,1])
 
 ###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
 
+#### Para identificar que los valores de los criterios de Akaike y Schwarz disminuyen conforme aumentan los órdenes no estacionales se graficaron sus valores.
+
+
+##                                             Gráfica 6
+<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Akaike%20y%20BIC.jpg?raw=true" alt="drawing"/>
+
+###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
+
+La Gráfica 11 muestra que el valor de las medidas de precisión de los modelos de ajuste disminuye mientras aumentan los órdenes no estacionales, esto sugiere que se puede estimar otro modelo de ajuste mejor; sin embargo, los valores disminuyen pocas décimas porcentuales. La Gráfica 12 muestra que, mientras aumentan los procesos 𝐴𝑅 y 𝑀𝐴, la precisión del pronóstico no sube a más de 85 %. la Gráfica 13 muestra el comportamiento de los criterios de Akaike y de Schwarz, el valor del primero disminuye conforme aumentan los órdenes no estacionales, en tanto que no sucede lo mismo con el segundo; la línea de tendencia lineal de ambos es decreciente, sugiriendo que se puede estimar un mejor modelo de ajuste.
+Con base en los resultados obtenidos se generaron tres modelos de ajuste adicionales con los siguientes órdenes no estacionales y estacionales:
+
+Ajuste INPC 1, 𝑆𝐴𝑅𝐼𝑀𝐴(3,1,1) (1,1,2)24
+Ajuste INPC 2, 𝑆𝐴𝑅𝐼𝑀𝐴(1,1,2) (1,1,2)24
+Ajuste INPC 3, 𝑆𝐴𝑅𝐼𝑀𝐴(2,1,2) (1,1,2)24
+
+Sobre los tres modelos de ajuste se aplicaron los criterios de selección con el objetivo de elegir uno y compararlo con los dos modelos de ajuste escogidos anteriormente; el resultado de los criterios fue el siguiente:
+## Modelo_Ajustado AIC BIC
+## 1 SARIMA(3,1,1)(1,1,2)[24] -1127.9 -1091.2
+## 2 SARIMA(3,1,2)(1,1,2)[24] -1126.0 -1084.6
+## 3 SARIMA(3,1,3)(1,1,2)[24] -1119.2 -1073.3
+## Modelo de ajuste con valor Akaike más bajo: 1
+## Valor Akaike: -1127.9
+## Modelo de ajuste con valor BIC más bajo: 1
+## Valor BIC: -1091.2
+Medidas de precisión de los modelos de ajuste
+## MAPE ME RMSE MAE MPE MASE
+## 1 0.15174 0.0017592 0.10729 0.067463 0.011386 0.42732
+## 2 0.15178 0.0017635 0.10729 0.067482 0.011400 0.42744
+## 3 0.15287 0.0030495 0.10768 0.068239 0.014636 0.43224
+## Modelo de ajuste con MAPE más bajo: 1
+## Valor MAPE: 0.15174
+## Modelo de ajuste con ME más bajo: 1
+## Valor ME: 0.0017592
+## Modelo de ajuste con RMSE más bajo: 2
+## Valor RMSE: 0.10729
+## Modelo de ajuste con MAE más bajo: 1
+46
+## Valor MAE: 0.067463
+## Modelo de ajuste con MPE más bajo: 1
+## Valor MPE: 0.011386
+## Modelo de ajuste con MASE más bajo: 1
+## Valor MASE: 0.42732
+La mayoría de los criterios de selección sugirieron elegir el primer modelo, por ello se compararon con los modelos escogidos anteriormente, siendo el resultado el siguiente:
+## Modelo_Ajustado Órdenes_pdq_y_PDQ AIC BIC
+## 1 Ajuste_INPC_1 (3,1,1) (1,1,2) -1127.9 -1091.2
+## 2 Ajuste_INPC_2 (1,1,2) (1,1,2) -1114.1 -1082.0
+## 3 Ajuste_INPC_3 (2,1,2) (1,1,2) -1116.2 -1079.4
+## Modelo de ajuste con valor Akaike más bajo: 1
+## Valor Akaike: -1127.9
+## Modelo de ajuste con valor BIC más bajo: 1
+## Valor BIC: -1091.2
+Medidas de precisión de los modelos de ajuste
+## Modelo_Ajustado MAPE ME RMSE MAE MPE MASE
+## 1 Ajuste_INPC_1 0.15174 0.0017592 0.10729 0.067463 0.011386 0.42732
+## 2 Ajuste_INPC_2 0.15322 0.0030848 0.10852 0.068220 0.014939 0.43211
+## 3 Ajuste_INPC_3 0.15225 0.0030495 0.10821 0.068110 0.014771 0.43142
+## Modelo de ajuste con MAPE más bajo: 1
+47
+## Valor MAPE: 0.15174
+## Modelo de ajuste con ME más bajo: 1
+## Valor ME: 0.0017592
+## Modelo de ajuste con RMSE más bajo: 1
+## Valor RMSE: 0.10729
+## Modelo de ajuste con MAE más bajo: 1
+## Valor MAE: 0.067463
+## Modelo de ajuste con MPE más bajo: 1
+## Valor MPE: 0.011386
+## Modelo de ajuste con MASE más bajo: 1
+## Valor MASE: 0.42732
+Los resultados de los criterios de selección sugirieron que el mejor modelo de ajuste es el primero, y antes de elegirlo, se realizó el examen de diagnóstico para observar si los residuos estimados eran ruido blanco
+9.3 Examen de diagnóstico de los residuos de los modelos de ajuste
+Se compararon los residuos de los tres modelos de ajuste elegidos como los mejores para corroborar que no estuvieran autocorrelacionados, se distribuyeran de manera normal y se comportaran como ruido blanco:
 
 ```r
-
-
 #### Medidas de precisión de los modelos de ajuste
-
 
 INPC <- INPC
 ajuste_x <- arima(INPC, order=c(1,1,1), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
@@ -694,99 +861,7 @@ setwd(ruta)
 # -Proyecto Terminal Modelos de ajuste I AR() MA()
 # Auto Regressive Integrate Moving Average
 #-----------------------------------------------------------------------
-setwd(ruta)
-INPC_General <- read.csv('INPC General quincenal.csv', header = TRUE, dec = '.', stringsAsFactors = FALSE)
-INPC <- INPC_General
-INPC <- ts(INPC, start = c(1988, 1), frequency = 24)
-INPC <- INPC[, -1]
-INPC <- zoo::na.approx(INPC)
-INPC <- INPC
-Ajuste_INPC_1 <- arima(INPC, order=c(0,1,0), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
-Ajuste_INPC_2 <- arima(INPC, order=c(1,1,1), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
-Ajuste_INPC_3 <- arima(INPC, order=c(2,1,2), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
-Ajuste_INPC_4 <- arima(INPC, order=c(3,1,3), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
-Ajuste_INPC_5 <- arima(INPC, order=c(4,1,4), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
-Modelo_Ajustado <- c("Ajuste_INPC_1","Ajuste_INPC_2","Ajuste_INPC_3","Ajuste_INPC_4","Ajuste_INPC_5")
-#Patrones_pdq_y_PDQ <- c("(0,1,0) (1,0,0)","(1,1,1) (1,0,0)","(2,1,2) (1,0,0)","(3,1,3) (1,0,0)","(4,1,4) (1,0,0)")
-AIC <- c(Ajuste_INPC_1$aic, Ajuste_INPC_2$aic, Ajuste_INPC_3$aic, Ajuste_INPC_4$aic,Ajuste_INPC_5$aic)
-BIC <- c(BIC(Ajuste_INPC_1), BIC(Ajuste_INPC_2), BIC(Ajuste_INPC_3), BIC(Ajuste_INPC_4),BIC(Ajuste_INPC_5))
-Modelo_Ajustado <- as.data.frame(Modelo_Ajustado)
-#Patrones_pdq_y_PDQ <- cbind(Patrones_pdq_y_PDQ)
-AIC <- as.data.frame(AIC)
-BIC <- as.data.frame(BIC)
-Summary_stat <- cbind(Modelo_Ajustado, AIC, BIC)
-Summary_stat
-# AIC
-75
-index_Summary_stat_Akaike_bajo <- which(Summary_stat[,2] == min(Summary_stat[,2]))
-Akaike_mas_bajo <- cbind(Summary_stat[index_Summary_stat_Akaike_bajo,1])
-Ajuste_Akaike_mas_bajo <- cbind(Summary_stat[index_Summary_stat_Akaike_bajo,2])
-# BIC
-index_Summary_stat_BIC_bajo <- which(Summary_stat[,3] == min(Summary_stat[,3]))
-BIC_mas_bajo <- cbind(Summary_stat[index_Summary_stat_BIC_bajo,1])
-Ajuste_BIC_mas_bajo <- cbind(Summary_stat[index_Summary_stat_BIC_bajo,3])
-cat("Modelo de ajuste con valor Akaike más bajo:", Akaike_mas_bajo[1,1])
-cat("Valor Akaike:", Ajuste_Akaike_mas_bajo[1,1])
-cat("Modelo de ajuste con valor BIC más bajo:", BIC_mas_bajo[1,1])
-cat("Valor BIC:", Ajuste_BIC_mas_bajo[1,1])
-#### Medidas de precisión de los modelos de ajuste
-accuracy_fit_INPC_1 <- forecast::accuracy(Ajuste_INPC_1)
-accuracy_fit_INPC_2 <- forecast::accuracy(Ajuste_INPC_2)
-accuracy_fit_INPC_3 <- forecast::accuracy(Ajuste_INPC_3)
-accuracy_fit_INPC_4 <- forecast::accuracy(Ajuste_INPC_4)
-accuracy_fit_INPC_5 <- forecast::accuracy(Ajuste_INPC_5)
-MAPE <- c(accuracy_fit_INPC_1[5],accuracy_fit_INPC_2[5],accuracy_fit_INPC_3[5],
-accuracy_fit_INPC_4[5],accuracy_fit_INPC_5[5])
-ME <- c(accuracy_fit_INPC_1[1],accuracy_fit_INPC_2[1],accuracy_fit_INPC_3[1],
-accuracy_fit_INPC_4[1],accuracy_fit_INPC_5[1])
-RMSE <- c(accuracy_fit_INPC_1[2],accuracy_fit_INPC_2[2],accuracy_fit_INPC_3[2],
-accuracy_fit_INPC_4[2],accuracy_fit_INPC_5[2])
-MAE <- c(accuracy_fit_INPC_1[3],accuracy_fit_INPC_2[3],accuracy_fit_INPC_3[3],
-accuracy_fit_INPC_4[3],accuracy_fit_INPC_5[3])
-MPE <- c(accuracy_fit_INPC_1[4],accuracy_fit_INPC_2[4],accuracy_fit_INPC_3[4],
-accuracy_fit_INPC_4[4],accuracy_fit_INPC_5[4])
-MASE <- c(accuracy_fit_INPC_1[6],accuracy_fit_INPC_2[6],accuracy_fit_INPC_3[6],
-accuracy_fit_INPC_4[6],accuracy_fit_INPC_5[6])
-Summary_accuracy <- cbind(Modelo_Ajustado, MAPE,ME,RMSE,MAE,MPE,MASE)
-Summary_accuracy
-#Summary_accuracy <- cbind(Modelo_Ajustado,MAPE,ME,RMSE,MAE,MPE,MASE)
-# Calculando índices para obtener los valores más bajos del resumen estadístico de precisión de los modelos de ajuste
-index_MAPE <- which(Summary_accuracy[,2] == min(Summary_accuracy[,2]))
-MAPE_mas_bajo <- cbind(Summary_accuracy[index_MAPE ,1])
-Valor_MAPE_mas_bajo <- cbind(Summary_accuracy[index_MAPE,2])
-cat("Modelo de ajuste con MAPE más bajo:", MAPE_mas_bajo[1,1])
-cat("Valor MAPE:", Valor_MAPE_mas_bajo[1,1])
-index_ME <- which(Summary_accuracy[,3] == min(Summary_accuracy[,3]))
-ME_mas_bajo <- cbind(Summary_accuracy[index_ME ,1])
-Valor_ME_mas_bajo <- cbind(Summary_accuracy[index_ME,3])
-76
-cat("Modelo de ajuste con ME más bajo:", ME_mas_bajo[1,1])
-cat("Valor ME:", Valor_ME_mas_bajo[1,1])
-index_RMSE <- which(Summary_accuracy[,4] == min(Summary_accuracy[,4]))
-RMSE_mas_bajo <- cbind(Summary_accuracy[index_RMSE ,1])
-Valor_RMSE_mas_bajo <- cbind(Summary_accuracy[index_RMSE,4])
-cat("Modelo de ajuste con RMSE más bajo:", RMSE_mas_bajo[1,1])
-cat("Valor RMSE:", Valor_RMSE_mas_bajo[1,1])
-index_MAE <- which(Summary_accuracy[,5] == min(Summary_accuracy[,5]))
-MAE_mas_bajo <- cbind(Summary_accuracy[index_MAE ,1])
-Valor_MAE_mas_bajo <- cbind(Summary_accuracy[index_MAE,5])
-cat("Modelo de ajuste con MAE más bajo:", MAE_mas_bajo[1,1])
-cat("Valor MAE:", Valor_MAE_mas_bajo[1,1])
-index_MPE <- which(Summary_accuracy[,6] == min(Summary_accuracy[,6]))
-MPE_mas_bajo <- cbind(Summary_accuracy[index_MPE ,1])
-Valor_MPE_mas_bajo <- cbind(Summary_accuracy[index_MPE,6])
-cat("Modelo de ajuste con MPE más bajo:", MPE_mas_bajo[1,1])
-cat("Valor MPE:", Valor_MPE_mas_bajo[1,1])
-index_MASE <- which(Summary_accuracy[,7] == min(Summary_accuracy[,7]))
-MASE_mas_bajo <- cbind(Summary_accuracy[index_MASE,1])
-Valor_MASE_mas_bajo <- cbind(Summary_accuracy[index_MASE,7])
-cat("Modelo de ajuste con MASE más bajo:", MASE_mas_bajo[1,1])
-cat("Valor MASE:", Valor_MASE_mas_bajo[1,1])
 
-setwd(ruta_exp)
-write.csv(Summary_accuracy, "Medidas de precisión.csv")
-write.csv(Summary_stat, "AIC BIC.csv")
-setwd(ruta)
 #-----------------------------------------------------------------------
 # -Proyecto Terminal Modelos de ajuste II AR() MA()
 # Auto Regressive Integrate Moving Average
@@ -921,7 +996,7 @@ MPE <- c(accuracy_fit_INPC_1[4],accuracy_fit_INPC_2[4],accuracy_fit_INPC_3[4])
 MASE <- c(accuracy_fit_INPC_1[6],accuracy_fit_INPC_2[6],accuracy_fit_INPC_3[6])
 Summary_accuracy <- cbind(Modelo_Ajustado, MAPE,ME,RMSE,MAE,MPE,MASE)
 Summary_accuracy
-80
+
 #Summary_accuracy <- cbind(Modelo_Ajustado,MAPE,ME,RMSE,MAE,MPE,MASE)
 # Calculando índices para obtener los valores más bajos del resumen estadístico de precisión de los modelos de ajuste
 index_MAPE <- which(Summary_accuracy[,2] == min(Summary_accuracy[,2]))
@@ -960,12 +1035,6 @@ write.csv(Summary_accuracy, "Medidas de precisión_III.csv")
 write.csv(Summary_stat, "AIC BIC_III.csv")
 setwd(ruta)
 ```
-
-
-##                                             Gráfica 6
-<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Akaike%20y%20BIC.jpg?raw=true" alt="drawing"/>
-
-###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
 
 ##                                             Gráfica 7
 <img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Simulaci%C3%B3n.jpg?raw=true" alt="drawing"/>
