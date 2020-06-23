@@ -111,7 +111,7 @@ INPC <- ts(INPC, start = c(1, 1988), frequency = 24)
 #### Para rechazar la H<sub>0</sub> frente a la H<sub>a</sub>, el valor p tiene que ser menor que 0.05; de lo contrario, se acepta la H<sub>0</sub> frente a la H<sub>a</sub> y se aplican las primeras diferencias a la serie.
 
 ```r
-test.raiz <- adf.test(var_x)
+test.raiz <- adf.test(INPC)
 options(digits=2) 
 if (test.raiz$p.value < 0.05)
 {
@@ -125,8 +125,8 @@ valor <- test.raiz$p.value
          
         "\nDebido a que la serie no es estacionaria entonces se estabiliza la serie de tiempo",
  "\nantes de estimar el modelo.");     
-n_diff_x <- forecast::ndiffs(var_x, test = c("adf"))
-    var_diff_x <- diff(var_x, n_diff_x)
+n_diff_x <- forecast::ndiffs(INPC, test = c("adf"))
+    INPC_diff <- diff(INPC, n_diff_x)
  }    
 ```
 
@@ -146,7 +146,7 @@ n_diff_x <- forecast::ndiffs(var_x, test = c("adf"))
 
 #### La Gráfica 2 muestra que las observaciones del INPC diferenciadas tienen una trayectoria alrededor del cero (valor medio de la serie del INPC) y con varianza constante, es decir, es ruido blanco, lo que significa que la serie es estacionaria en varianza, se vue
 ```r
-test.raiz <- adf.test(var_diff_x)
+test.raiz <- adf.test(INPC_diff)
 options(digits=2) 
 if (test.raiz$p.value < 0.05)
 {
@@ -162,7 +162,7 @@ Se puede entonces calcular el modelo de ajuste")
        "Debido a que la serie sigue presentando no estacionariedad",
        "se calculan las primeras diferencias de la serie",
         "junto con el rezago de orden 24, el valor p es el siguiente: ")
-    diff_orden <- diff(var_x, lag = 24)
+    diff_orden <- diff(INPC, lag = 24)
     test.raiz <- adf.test(diff_orden)
        options(digits=2) 
        if (test.raiz$p.value < 0.05)
@@ -190,18 +190,18 @@ Se puede entonces calcular el modelo de ajuste")
 ### Gráficas de la función de autocorrelación (ACF) y de la función de autocorrelación parcial (PACF) para obtener los patrones del proceso AR() y MA().
 
 ```r
-acf2(ts(var_diff_x, frequency = 1))
-var_x_dif_orden <- diff(diff(var_x), lag = 24) ### Diferencias estacionales
+acf2(ts(INPC_diff, frequency = 1))
+INPC_dif_orden <- diff(diff(INPC), lag = 24) ### Diferencias estacionales
 ```
 ### Gráficas de la función de autocorrelación (ACF) y de la función de autocorrelación parcial (PACF) para obtener los patrones del proceso AR() y MA() del componente estacional.
 
 ```r
-acf2(ts(var_x_dif_orden, frequency = 1))
+acf2(ts(INPC_dif_orden, frequency = 1))
 ```
 #### Criterios AIC y BIC de los modelos de ajuste
 
 ```r
-INPC <- var_x
+INPC <- INPC
 ajuste_INPC_1 <- arima(INPC, order=c(0,1,0), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
 ajuste_INPC_2 <- arima(INPC, order=c(1,1,0), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
 ajuste_INPC_3 <- arima(INPC, order=c(0,1,1), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
@@ -272,7 +272,7 @@ accuracy_fit_INPC_4[6],accuracy_fit_INPC_5[6],accuracy_fit_INPC_6[6],
 accuracy_fit_INPC_7[6],accuracy_fit_INPC_8[6],accuracy_fit_INPC_9[6])
 Summary_accuracy <- cbind(MAPE,ME,RMSE,MAE,MPE,MASE)
 Summary_accuracy
-# Exportar datos
+
 setwd(ruta_exp)
 write.csv(Summary_accuracy, "Medidas_de_precisión.csv")
 setwd(ruta)
@@ -309,11 +309,11 @@ MASE_mas_bajo <- cbind(Summary_accuracy[index_MASE,1])
 Valor_MASE_mas_bajo <- cbind(Summary_accuracy[index_MASE,7])
 cat("Modelo de ajuste con MASE más bajo:", MASE_mas_bajo[1,1])
 cat("Valor MASE:", Valor_MASE_mas_bajo[1,1])
-INPC <- var_x
+INPC <- INPC
 ajuste_x <- arima(INPC, order=c(1,1,1), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
 tsdiag(ajuste_x)
-INPC_General <- var_x
-# Exportar datos
+INPC_General <- INPC
+
 setwd(ruta_exp)
 h_x <- forecast::forecast(ajuste_x)
 h_x <- as.data.frame(h_x)
@@ -328,7 +328,7 @@ plot(resid_ajuste_x, main = "Graficando los residuos del ajuste del modelo.", yl
 abline(h = mean(resid_ajuste_x), col = "blue")
 hist(resid_ajuste_x, main = "Histograma de los residuos del ajuste del modelo.", col= "black", xlab = "Residuos")
 68
-# Exportar datos
+
 setwd(ruta_exp)
 write.csv(resid_ajuste_x, "residuos_x.csv")
 setwd(ruta)
@@ -337,7 +337,7 @@ cat("Sigma Cuadrado:", ajuste_x$sigma2)
 cat("Media de los residuos:", mean(resid_ajuste_x))
 cat("Akaike:",ajuste_x$aic)
 ### Simulación de pronóstico: INPC General.
-INPC_General <- var_x_contraste
+INPC_General <- INPC_contraste
 pronostico <- sarima.for(INPC_General, n.ahead = 24, p = 1, d =1, q = 1, P = 1, D = 1, Q = 2, S = 24, no.constant = FALSE)
 values.predict_x <- pronostico$pred
 ##### Línea **roja** valores observados de la serie de tiempo
@@ -355,7 +355,7 @@ geom_line(col = "Cyan4", size = 1.1, aes(y=Forecasted_x)) +
 geom_point(col = "Cyan4", size = 3, aes(y=Forecasted_x)) +
 geom_line(col="Cyan", size = 3.5, alpha = 0.18,aes(y=Forecasted_x))
 simulation_plot_x
-# Exportar datos
+
 setwd(ruta_exp)
 write.csv(Observed_x, "Observed_x.csv")
 write.csv(Forecasted_x, "Forecasted_x.csv")
@@ -363,18 +363,18 @@ setwd(ruta)
 ### **Pronóstico de 24 quincenas para el INPC General de México.**
 setwd(ruta)
 INPC_General <- read.csv('INPC General quincenal.csv', header = TRUE, dec = '.', stringsAsFactors = FALSE)
-var_x <- INPC_General
-var_x <- ts(var_x, start = c(1988, 1), frequency = 24)
-var_x <- var_x[, -1]
-var_x <- zoo::na.approx(var_x)
+INPC <- INPC_General
+INPC <- ts(INPC, start = c(1988, 1), frequency = 24)
+INPC <- INPC[, -1]
+INPC <- zoo::na.approx(INPC)
 69
-INPC_General <- var_x
+INPC_General <- INPC
 pronostico_x <- sarima.for(INPC_General, n.ahead = 24, p = 1, d =1, q = 1, P = 1, D = 1, Q = 2, S = 24, no.constant = FALSE)
 ### Valor de los predictores
 (rbind(ajuste_x$coef))
 ### Valores de la predicción
 (pronostico_x$pred)
-# Exportar datos
+
 setwd(ruta_exp)
 write.csv(pronostico_x$pred, "Hforecasted_x.csv")
 setwd(ruta)
@@ -403,7 +403,7 @@ ajuste_y <- arima(INPC, order=c(2,1,2), seasonal = list(order = c(1,1,2), period
 70
 tsdiag(ajuste_y)
 INPC_General <- var_y
-# Exportar datos
+
 setwd(ruta_exp)
 h_y <- forecast::forecast(ajuste_y)
 h_y <- as.data.frame(h_y)
@@ -418,7 +418,7 @@ resid_ajuste_y <- ajuste_y$residuals
 plot(resid_ajuste_y, main = "Graficando los residuos del ajuste del modelo.", ylab = "Residuos", type = "o")
 abline(h = mean(resid_ajuste_y), col = "blue")
 hist(resid_ajuste_y, main = "Histograma de los residuos del ajuste del modelo.", col= "black", xlab = "Residuos")
-# Exportar datos
+
 setwd(ruta_exp)
 write.csv(resid_ajuste_y, "residuos_y.csv")
 setwd(ruta)
@@ -446,7 +446,7 @@ geom_line(col = "Cyan4", size = 1.1, aes(y=Forecasted_y)) +
 geom_point(col = "Cyan4", size = 3, aes(y=Forecasted_y)) +
 geom_line(col="Cyan", size = 3.5, alpha = 0.18,aes(y=Forecasted_y))
 simulation_plot_y
-# Exportar datos
+
 setwd(ruta_exp)
 write.csv(Observed_y, "Observed_y.csv")
 write.csv(Forecasted_y, "Forecasted_y.csv")
@@ -464,7 +464,7 @@ pronostico_y <- sarima.for(INPC_General, n.ahead = 24, p = 2, d =1, q = 2, P = 1
 (rbind(ajuste_y$coef))
 ### Valores de la predicción
 (pronostico_y$pred)
-# Exportar datos
+
 setwd(ruta_exp)
 write.csv(pronostico_y$pred, "Hforecasted_y.csv")
 setwd(ruta)
@@ -494,7 +494,7 @@ INPC <- var_z
 ajuste_z <- arima(INPC, order=c(3,1,1), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
 tsdiag(ajuste_z)
 INPC_General <- var_z
-# Exportar datos
+
 setwd(ruta_exp)
 h_z <- forecast::forecast(ajuste_z)
 h_z <- as.data.frame(h_z)
@@ -509,7 +509,7 @@ resid_ajuste_z <- ajuste_z$residuals
 plot(resid_ajuste_z, main = "Graficando los residuos del ajuste del modelo.", ylab = "Residuos", type = "o")
 abline(h = mean(resid_ajuste_z), col = "blue")
 hist(resid_ajuste_z, main = "Histograma de los residuos del ajuste del modelo.", col= "black", xlab = "Residuos")
-# Exportar datos
+
 setwd(ruta_exp)
 write.csv(resid_ajuste_z, "residuos_z.csv")
 setwd(ruta)
@@ -537,7 +537,7 @@ geom_line(col = "Cyan4", size = 1.1, aes(y=Forecasted_z)) +
 geom_point(col = "Cyan4", size = 3, aes(y=Forecasted_z)) +
 geom_line(col="Cyan", size = 3.5, alpha = 0.18,aes(y=Forecasted_z))
 simulation_plot_z
-# Exportar datos
+
 setwd(ruta_exp)
 write.csv(Observed_z, "Observed_z.csv")
 write.csv(Forecasted_z, "Forecasted_z.csv")
@@ -556,7 +556,7 @@ pronostico_z <- sarima.for(INPC_General, n.ahead = 24, p = 3, d =1, q = 1, P = 1
 (rbind(ajuste_z$coef))
 ### Valores de la predicción
 (pronostico_z$pred)
-# Exportar datos
+
 setwd(ruta_exp)
 write.csv(pronostico_z$pred, "Hforecasted_z.csv")
 setwd(ruta)
@@ -566,11 +566,11 @@ setwd(ruta)
 #-----------------------------------------------------------------------
 setwd(ruta)
 INPC_General <- read.csv('INPC General quincenal.csv', header = TRUE, dec = '.', stringsAsFactors = FALSE)
-var_x <- INPC_General
-var_x <- ts(var_x, start = c(1988, 1), frequency = 24)
-var_x <- var_x[, -1]
-var_x <- zoo::na.approx(var_x)
-INPC <- var_x
+INPC <- INPC_General
+INPC <- ts(INPC, start = c(1988, 1), frequency = 24)
+INPC <- INPC[, -1]
+INPC <- zoo::na.approx(INPC)
+INPC <- INPC
 Ajuste_INPC_1 <- arima(INPC, order=c(0,1,0), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
 Ajuste_INPC_2 <- arima(INPC, order=c(1,1,1), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
 Ajuste_INPC_3 <- arima(INPC, order=c(2,1,2), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
@@ -652,7 +652,7 @@ MASE_mas_bajo <- cbind(Summary_accuracy[index_MASE,1])
 Valor_MASE_mas_bajo <- cbind(Summary_accuracy[index_MASE,7])
 cat("Modelo de ajuste con MASE más bajo:", MASE_mas_bajo[1,1])
 cat("Valor MASE:", Valor_MASE_mas_bajo[1,1])
-# Exportar datos
+
 setwd(ruta_exp)
 write.csv(Summary_accuracy, "Medidas de precisión.csv")
 write.csv(Summary_stat, "AIC BIC.csv")
@@ -663,11 +663,11 @@ setwd(ruta)
 #-----------------------------------------------------------------------
 setwd(ruta)
 INPC_General <- read.csv('INPC General quincenal.csv', header = TRUE, dec = '.', stringsAsFactors = FALSE)
-var_x <- INPC_General
-var_x <- ts(var_x, start = c(1988, 1), frequency = 24)
-var_x <- var_x[, -1]
-var_x <- zoo::na.approx(var_x)
-INPC <- var_x
+INPC <- INPC_General
+INPC <- ts(INPC, start = c(1988, 1), frequency = 24)
+INPC <- INPC[, -1]
+INPC <- zoo::na.approx(INPC)
+INPC <- INPC
 Ajuste_INPC_1 <- arima(INPC, order=c(3,1,1), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
 77
 Ajuste_INPC_2 <- arima(INPC, order=c(3,1,2), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
@@ -738,7 +738,7 @@ MASE_mas_bajo <- cbind(Summary_accuracy[index_MASE,1])
 Valor_MASE_mas_bajo <- cbind(Summary_accuracy[index_MASE,7])
 cat("Modelo de ajuste con MASE más bajo:", MASE_mas_bajo[1,1])
 cat("Valor MASE:", Valor_MASE_mas_bajo[1,1])
-# Exportar datos
+
 setwd(ruta_exp)
 write.csv(Summary_accuracy, "Medidas de precisión_3.csv")
 write.csv(Summary_stat, "AIC BIC_3.csv")
@@ -749,12 +749,12 @@ setwd(ruta)
 #-----------------------------------------------------------------------
 setwd(ruta)
 INPC_General <- read.csv('INPC General quincenal.csv', header = TRUE, dec = '.', stringsAsFactors = FALSE)
-var_x <- INPC_General
+INPC <- INPC_General
 79
-var_x <- ts(var_x, start = c(1988, 1), frequency = 24)
-var_x <- var_x[, -1]
-var_x <- zoo::na.approx(var_x)
-INPC <- var_x
+INPC <- ts(INPC, start = c(1988, 1), frequency = 24)
+INPC <- INPC[, -1]
+INPC <- zoo::na.approx(INPC)
+INPC <- INPC
 Ajuste_INPC_1 <- arima(INPC, order=c(3,1,1), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
 Ajuste_INPC_2 <- arima(INPC, order=c(1,1,2), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
 Ajuste_INPC_3 <- arima(INPC, order=c(2,1,2), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
@@ -824,7 +824,7 @@ MASE_mas_bajo <- cbind(Summary_accuracy[index_MASE,1])
 Valor_MASE_mas_bajo <- cbind(Summary_accuracy[index_MASE,7])
 cat("Modelo de ajuste con MASE más bajo:", MASE_mas_bajo[1,1])
 cat("Valor MASE:", Valor_MASE_mas_bajo[1,1])
-# Exportar datos
+
 setwd(ruta_exp)
 write.csv(Summary_accuracy, "Medidas de precisión_III.csv")
 write.csv(Summary_stat, "AIC BIC_III.csv")
