@@ -775,276 +775,22 @@ Los resultados de los criterios de selección sugirieron que el mejor modelo de 
 Se compararon los residuos de los tres modelos de ajuste elegidos como los mejores para corroborar que no estuvieran autocorrelacionados, se distribuyeran de manera normal y se comportaran como ruido blanco:
 ```
 
+
+
+
+
+
+
+
+
+
+
+
+
 ```r
-#### Medidas de precisión de los modelos de ajuste
-
-INPC <- INPC
-ajuste_x <- arima(INPC, order=c(1,1,1), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
-tsdiag(ajuste_x)
-INPC_General <- INPC
-
-setwd(ruta_exp)
-h_x <- forecast::forecast(ajuste_x)
-h_x <- as.data.frame(h_x)
-write.csv(h_x, "h_arima_x.csv")
-setwd(ruta)
-qqnorm(ajuste_x$resid, main = "Normal Q-Q Plot",
-xlab = "Theoretical Quantiles", ylab = "Sample Quantiles")
-qqline(ajuste_x$resid)
-#### Valor de los cuantiles.
-resid_ajuste_x <- ajuste_x$residuals
-plot(resid_ajuste_x, main = "Graficando los residuos del ajuste del modelo.", ylab = "Residuos", type = "o")
-abline(h = mean(resid_ajuste_x), col = "blue")
-hist(resid_ajuste_x, main = "Histograma de los residuos del ajuste del modelo.", col= "black", xlab = "Residuos")
-68
-
-setwd(ruta_exp)
-write.csv(resid_ajuste_x, "residuos_x.csv")
-setwd(ruta)
-#### Resumen estadístico del ajuste del modelo
-cat("Sigma Cuadrado:", ajuste_x$sigma2)
-cat("Media de los residuos:", mean(resid_ajuste_x))
-cat("Akaike:",ajuste_x$aic)
-### Simulación de pronóstico: INPC General.
-INPC_General <- INPC_contraste
-pronostico <- sarima.for(INPC_General, n.ahead = 24, p = 1, d =1, q = 1, P = 1, D = 1, Q = 2, S = 24, no.constant = FALSE)
-values.predict_x <- pronostico$pred
-##### Línea **roja** valores observados de la serie de tiempo
-##### Línea **azul** valores pronosticados de la serie de tiempo
-Período_x <- gsub("/(*)", " ", test_x[,1])
-Observed_x <- test_x[,2]
-Forecasted_x <- values.predict_x
-simulation_x <- data.frame(Período_x, Observed_x, Forecasted_x)
-simulation_plot_x <- ggplot(data= simulation_x, aes(x=Período_x, y=Observed_x, group=1)) +
-geom_line(col="red2", size = 1.1) +
-geom_point(col="red2", size = 3) +
-geom_line(col="deeppink2", size = 3.5, alpha = 0.18) +
-labs(title = "Valores observados y valores pronosticados.",x = "Fecha", y = "INPC General")+
-geom_line(col = "Cyan4", size = 1.1, aes(y=Forecasted_x)) +
-geom_point(col = "Cyan4", size = 3, aes(y=Forecasted_x)) +
-geom_line(col="Cyan", size = 3.5, alpha = 0.18,aes(y=Forecasted_x))
-simulation_plot_x
-
-setwd(ruta_exp)
-write.csv(Observed_x, "Observed_x.csv")
-write.csv(Forecasted_x, "Forecasted_x.csv")
-setwd(ruta)
-### **Pronóstico de 24 quincenas para el INPC General de México.**
-setwd(ruta)
-INPC_General <- read.csv('INPC General quincenal.csv', header = TRUE, dec = '.', stringsAsFactors = FALSE)
-INPC <- INPC_General
-INPC <- ts(INPC, start = c(1988, 1), frequency = 24)
-INPC <- INPC[, -1]
-INPC <- zoo::na.approx(INPC)
-69
-INPC_General <- INPC
-pronostico_x <- sarima.for(INPC_General, n.ahead = 24, p = 1, d =1, q = 1, P = 1, D = 1, Q = 2, S = 24, no.constant = FALSE)
-### Valor de los predictores
-(rbind(ajuste_x$coef))
-### Valores de la predicción
-(pronostico_x$pred)
-
-setwd(ruta_exp)
-write.csv(pronostico_x$pred, "Hforecasted_x.csv")
-setwd(ruta)
-### Modelo II
-setwd(ruta)
-INPC_General <- read.csv('INPC General quincenal.csv', header = TRUE, dec = '.', stringsAsFactors = FALSE)
-### Particionando la serie de tiempo en dos conjuntos
-## Conjunto 1 -- Base de entrenamiento (train)
-## Conjunto 2 -- Base de prueba (test)
-var_y <- INPC_General
-longitud_y <- length(var_y[,2])
-numTrain_y <- longitud_y - 24
-train_y <- var_y[1:numTrain_y,]
-test_y <- tail(var_y, 24) # Valores reales de la serie que van a ser contrastados con los pronosticados.
-var_y_contraste <- train_y # Asignando valores del entrenamiento a la variable y que será contrastada
-var_y_contraste <- ts(var_y_contraste, start = c(1988, 1), frequency = 24)
-var_y_contraste <- var_y_contraste[, -1]
-var_y_contraste <- zoo::na.approx(var_y_contraste)
-var_y <- ts(var_y, start = c(1988, 1), frequency = 24)
-var_y <- var_y[, - 1]
-var_y <- zoo::na.approx(var_y)
-### El segundo modelo contiene el siguiente patrón **AR(2)I(1)MA(2)** junto con los patrones estacionales (P,D,Q): **AR(1)I(1)MA(2)** . Se deduce el siguiente modelo de ajuste:
-###### **ajusteARIMA <- arima(INPC_General, order=c(2,1,2), seasonal = list(order = c(1,1,2), period = 24), method="ML", include.mean = TRUE)**
-INPC <- var_y
-ajuste_y <- arima(INPC, order=c(2,1,2), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
-70
-tsdiag(ajuste_y)
-INPC_General <- var_y
-
-setwd(ruta_exp)
-h_y <- forecast::forecast(ajuste_y)
-h_y <- as.data.frame(h_y)
-write.csv(h_y, "h_arima_y.csv")
-setwd(ruta)
-### Graficando los cuantiles de la distribución normal de los residuos del modelo ajustado.
-qqnorm(ajuste_y$resid, main = "Normal Q-Q Plot",
-xlab = "Theoretical Quantiles", ylab = "Sample Quantiles")
-qqline(ajuste_y$resid)
-#### Valor de los cuantiles.
-resid_ajuste_y <- ajuste_y$residuals
-plot(resid_ajuste_y, main = "Graficando los residuos del ajuste del modelo.", ylab = "Residuos", type = "o")
-abline(h = mean(resid_ajuste_y), col = "blue")
-hist(resid_ajuste_y, main = "Histograma de los residuos del ajuste del modelo.", col= "black", xlab = "Residuos")
-
-setwd(ruta_exp)
-write.csv(resid_ajuste_y, "residuos_y.csv")
-setwd(ruta)
-#### Resumen estadístico del ajuste del modelo
-cat("Sigma Cuadrado:", ajuste_y$sigma2)
-cat("Media de los residuos:", mean(resid_ajuste_y))
-cat("Akaike:",ajuste_y$aic)
-### Simulación de pronóstico: INPC General.
-INPC_General <- var_y_contraste
-pronostico <- sarima.for(INPC_General, n.ahead = 24, p = 2, d =1, q = 2, P = 1, D = 1, Q = 2, S = 24, no.constant = FALSE)
-values.predict_y <- pronostico$pred
-##### Línea **roja** valores observados de la serie de tiempo
-##### Línea **azul** valores pronosticados de la serie de tiempo
-Período_y <- gsub("/(*)", " ", test_y[,1])
-Observed_y <- test_y[,2]
-Forecasted_y <- values.predict_y
-simulation_y <- data.frame(Período_y, Observed_y, Forecasted_y)
-simulation_plot_y <- ggplot(data= simulation_y, aes(x=Período_y, y=Observed_y, group=1)) +
-71
-geom_line(col="red2", size = 1.1) +
-geom_point(col="red2", size = 3)+
-geom_line(col="deeppink2", size = 3.5, alpha = 0.18) +
-labs(title = "Valores observados y valores pronosticados.",x = "Fecha", y = "INPC General") +
-geom_line(col = "Cyan4", size = 1.1, aes(y=Forecasted_y)) +
-geom_point(col = "Cyan4", size = 3, aes(y=Forecasted_y)) +
-geom_line(col="Cyan", size = 3.5, alpha = 0.18,aes(y=Forecasted_y))
-simulation_plot_y
-
-setwd(ruta_exp)
-write.csv(Observed_y, "Observed_y.csv")
-write.csv(Forecasted_y, "Forecasted_y.csv")
-setwd(ruta)
-### **Pronóstico de 24 quincenas para el INPC General de México.**
-setwd(ruta)
-INPC_General <- read.csv('INPC General quincenal.csv', header = TRUE, dec = '.', stringsAsFactors = FALSE)
-var_y <- INPC_General
-var_y <- ts(var_y, start = c(1988, 1), frequency = 24)
-var_y <- var_y[, - 1]
-var_y <- zoo::na.approx(var_y)
-INPC_General <- var_y
-pronostico_y <- sarima.for(INPC_General, n.ahead = 24, p = 2, d =1, q = 2, P = 1, D = 1, Q = 2, S = 24, no.constant = FALSE)
-### Valor de los predictores
-(rbind(ajuste_y$coef))
-### Valores de la predicción
-(pronostico_y$pred)
-
-setwd(ruta_exp)
-write.csv(pronostico_y$pred, "Hforecasted_y.csv")
-setwd(ruta)
-### Modelo III
-setwd(ruta)
-INPC_General <- read.csv('INPC General quincenal.csv', header = TRUE, dec = '.', stringsAsFactors = FALSE)
-### Particionando la serie de tiempo en dos conjuntos
-## Conjunto 1 -- Base de entrenamiento (train)
-## Conjunto 2 -- Base de prueba (test)
-var_z <- INPC_General
-longitud_z <- length(var_z[,2])
-72
-numTrain_z <- longitud_z - 24
-train_z <- var_z[1:numTrain_z,]
-test_z <- tail(var_z, 24) # Valores reales de la serie
-# que van a ser contrastados con los pronosticados.
-var_z_contraste <- train_z # Asignando valores del entrenamiento a la variable z que será contrastada
-var_z_contraste <- ts(var_z_contraste, start = c(1988, 1), frequency = 24)
-var_z_contraste <- var_z_contraste[, -1]
-var_z_contraste <- zoo::na.approx(var_z_contraste)
-var_z <- ts(var_z, start = c(1988, 1), frequency = 24)
-var_z <- var_z[, - 1]
-var_z <- zoo::na.approx(var_z)
-### El tercer modelo contiene el siguiente patrón **AR(3)I(1)MA(1)** junto con los patrones estacionales (P,D,Q): **AR(1)I(1)MA(2)** . Se deduce el siguiente modelo de ajuste:
-###### **ajusteARIMA <- arima(INPC_General, order=c(3,1,1), seasonal = list(order = c(1,1,2), period = 24), method="ML", include.mean = TRUE)**
-INPC <- var_z
-ajuste_z <- arima(INPC, order=c(3,1,1), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
-tsdiag(ajuste_z)
-INPC_General <- var_z
-
-setwd(ruta_exp)
-h_z <- forecast::forecast(ajuste_z)
-h_z <- as.data.frame(h_z)
-write.csv(h_z, "h_arima_z.csv")
-setwd(ruta)
-### Graficando los cuantiles de la distribución normal de los residuos del modelo ajustado.
-qqnorm(ajuste_z$resid, main = "Normal Q-Q Plot",
-xlab = "Theoretical Quantiles", ylab = "Sample Quantiles")
-qqline(ajuste_z$resid)
-#### Valor de los cuantiles.
-resid_ajuste_z <- ajuste_z$residuals
-plot(resid_ajuste_z, main = "Graficando los residuos del ajuste del modelo.", ylab = "Residuos", type = "o")
-abline(h = mean(resid_ajuste_z), col = "blue")
-hist(resid_ajuste_z, main = "Histograma de los residuos del ajuste del modelo.", col= "black", xlab = "Residuos")
-
-setwd(ruta_exp)
-write.csv(resid_ajuste_z, "residuos_z.csv")
-setwd(ruta)
-73
-#### Resumen estadístico del ajuste del modelo
-cat("Sigma Cuadrado:", ajuste_z$sigma2)
-cat("Media de los residuos:", mean(resid_ajuste_z))
-cat("Akaike:",ajuste_z$aic)
 ### Simulación de pronóstico: INPC General.
 INPC_General <- var_z_contraste
 pronostico <- sarima.for(INPC_General, n.ahead = 24, p = 3, d =1, q = 1, P = 1, D = 1, Q = 2, S = 24, no.constant = FALSE)
-values.predict_z <- pronostico$pred
-##### Línea **roja** valores observados de la serie de tiempo
-##### Línea **azul** valores pronosticados de la serie de tiempo
-Período_z <- gsub("/(*)", " ", test_z[,1])
-Observed_z <- test_z[,2]
-Forecasted_z <- values.predict_z
-simulation_z <- data.frame(Período_z, Observed_z, Forecasted_z)
-simulation_plot_z <- ggplot(data= simulation_z, aes(x=Período_z, y=Observed_z, group=1)) +
-geom_line(col="red2", size = 1.1) +
-geom_point(col="red2", size = 3)+
-geom_line(col="deeppink2", size = 3.5, alpha = 0.18) +
-labs(title = "Valores observados y valores pronosticados.",x = "Fecha", y = "INPC General") +
-geom_line(col = "Cyan4", size = 1.1, aes(y=Forecasted_z)) +
-geom_point(col = "Cyan4", size = 3, aes(y=Forecasted_z)) +
-geom_line(col="Cyan", size = 3.5, alpha = 0.18,aes(y=Forecasted_z))
-simulation_plot_z
-
-setwd(ruta_exp)
-write.csv(Observed_z, "Observed_z.csv")
-write.csv(Forecasted_z, "Forecasted_z.csv")
-setwd(ruta)
-### **Pronóstico de 24 quincenas para el INPC General de México.**
-setwd(ruta)
-INPC_General <- read.csv('INPC General quincenal.csv', header = TRUE, dec = '.', stringsAsFactors = FALSE)
-var_z <- INPC_General
-var_z <- ts(var_z, start = c(1988, 1), frequency = 24)
-var_z <- var_z[, - 1]
-var_z <- zoo::na.approx(var_z)
-INPC_General <- var_z
-pronostico_z <- sarima.for(INPC_General, n.ahead = 24, p = 3, d =1, q = 1, P = 1, D = 1, Q = 2, S = 24, no.constant = FALSE)
-74
-### Valor de los predictores
-(rbind(ajuste_z$coef))
-### Valores de la predicción
-(pronostico_z$pred)
-
-setwd(ruta_exp)
-write.csv(pronostico_z$pred, "Hforecasted_z.csv")
-setwd(ruta)
-#-----------------------------------------------------------------------
-# -Proyecto Terminal Modelos de ajuste I AR() MA()
-# Auto Regressive Integrate Moving Average
-#-----------------------------------------------------------------------
-
-#-----------------------------------------------------------------------
-# -Proyecto Terminal Modelos de ajuste II AR() MA()
-# Auto Regressive Integrate Moving Average
-#-----------------------------------------------------------------------
-setwd(ruta)
-
-#-----------------------------------------------------------------------
-# -Proyecto Terminal Modelos de ajuste III AR() MA()
-# Auto Regressive Integrate Moving Average
-#-----------------------------------------------------------------------
-
 ```
 
 ##                                             Gráfica 7
@@ -1057,6 +803,17 @@ setwd(ruta)
 
 ###### Fuente: Elaboración propia en Excel con datos del INPC pronosticado
 
+```r
+### **Pronóstico de 24 quincenas para el INPC General de México.**
+setwd(ruta)
+INPC_General <- read.csv('INPC General quincenal.csv', header = TRUE, dec = '.', stringsAsFactors = FALSE)
+var_z <- INPC_General
+var_z <- ts(var_z, start = c(1988, 1), frequency = 24)
+var_z <- var_z[, - 1]
+var_z <- zoo::na.approx(var_z)
+INPC_General <- var_z
+pronostico_z <- sarima.for(INPC_General, n.ahead = 24, p = 3, d =1, q = 1, P = 1, D = 1, Q = 2, S = 24, no.constant = FALSE)
+```
 
 ##                                             Gráfica 9
 <img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Pron%C3%B3stico%20de%20la%20inflaci%C3%B3n.jpg?raw=true" alt="drawing"/>
