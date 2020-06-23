@@ -124,9 +124,7 @@ valor <- test.raiz$p.value
     cat("Raíz unitaria (serie de tiempo no estacionaria) el valor p es: " , valor,
          
         "\nDebido a que la serie no es estacionaria entonces se estabiliza la serie de tiempo",
- "\nantes de estimar el modelo.");     
-n_diff_x <- forecast::ndiffs(INPC, test = c("adf"))
-    INPC_diff <- diff(INPC, n_diff_x)
+ "\nantes de estimar el modelo.")
  }    
 ```
 
@@ -139,6 +137,11 @@ n_diff_x <- forecast::ndiffs(INPC, test = c("adf"))
 ```
 #### El resultado de la prueba generó un valor p mayor que 0.05, por ello, se acepta la H<sub>0</sub> frente a la H<sub>a</sub> y se diferencia una vez la serie de tiempo, se vuelve a aplicar la prueba para comprobar que ya no hay raíz unitaria, antes de ver los resultados de la prueba, se graficó la serie del INPC diferenciada para observar si tiene un comportamiento de ruido blanco: 
 
+```r
+n_diff_INPC <- forecast::ndiffs(INPC, test = c("adf")) #  Obteniendo el número de veces que se tiene que diferenciar la serie de tiempo
+diff_INPC <- diff(INPC, n_diff_INPC) #  obteniendo los valores de las primeras diferencias del INPC
+plot(diff_INPC) # Graficando las primeras diferencias
+```
 ##                                             Gráfica 2
 <img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Primeras%20diferencias.jpg?raw=true" alt="drawing"/>
 
@@ -186,53 +189,84 @@ Se puede entonces calcular el modelo de ajuste")
 ```
 #### En efecto, el valor p es menor que 0.05, por lo que se rechazó la H<sub>0</sub> de no estacionariedad frente a la H<sub>a</sub> de estacionariedad; como la serie de tiempo es estacionaria, se prosiguió a la fase de identificación de los órdenes ARIMA.
 
-## 1. Identificación
-### Gráficas de la función de autocorrelación (ACF) y de la función de autocorrelación parcial (PACF) para obtener los patrones del proceso AR() y MA().
+## 1. Identificación de los órdenes estacionales y no estacionales
+
+#### En esta fase las funciones de autocorrelación (𝐴𝐶𝐹) y autocorrelación parcial (𝑃𝐴𝐶𝐹) contribuyen a identificar los órdenes 𝐴𝑅𝑀𝐴(𝑝,𝑞) de la serie de tiempo.
 
 ```r
 acf2(ts(INPC_diff, frequency = 1))
 INPC_dif_orden <- diff(diff(INPC), lag = 24) ### Diferencias estacionales
 ```
+
 ### Gráficas de la función de autocorrelación (ACF) y de la función de autocorrelación parcial (PACF) para obtener los patrones del proceso AR() y MA() del componente estacional.
 
 ```r
 acf2(ts(INPC_dif_orden, frequency = 1))
 ```
-#### Criterios AIC y BIC de los modelos de ajuste
+#### La Gráfica 8 está compuesta por dos gráficas; la gráfica de la función 𝐴𝐶𝐹 (parte superior) muestra un comportamiento estacional, crece y decrece a lo largo de los rezagos, lo que significa que la serie de tiempo tiene un componente estacional, por lo tanto, se debe de utilizar un modelo 𝑆𝐴𝑅𝐼𝑀𝐴. La gráfica de la función 𝑃𝐴𝐶𝐹 (parte inferior) también muestra ese patrón de comportamiento creciente y decreciente a lo largo de los rezagos. Los rezagos de la función de autocorrelación 𝐴𝐶𝐹 son estadísticamente significativos hasta el segundo, por lo que se identificó un proceso de promedios móviles de segundo orden, es decir, un 𝑀𝐴(2); por otro lado, la función de autocorrelación parcial (𝑃𝐴𝐶𝐹) muestra que el segundo rezago es estadísticamente significativo, por ello se identificó un proceso autorregresivo de segundo orden, es decir, un 𝐴𝑅(2).
+
+#### La serie de tiempo se diferenció una vez, entonces se tiene un proceso 𝐴𝑅𝐼𝑀𝐴(2,1,2). Además, se detectó un componente estacional, lo que implicó calcular las diferencias estacionales sobre las primeras diferencias del INPC siendo estas de orden 24 porque la frecuencia de la serie es quincenal. Posteriormente se graficaron a fin de observar si se comportan como ruido blanco, después sobre las diferencias estacionales, se aplicó la prueba 𝐴𝐷𝐹 con el objetivo de corroborar que no exista raíz unitaria:
 
 ```r
-INPC <- INPC
+INPC_diff_est <- diff(diff(INPC), lag = 24) #  Diferencias estacionales de orden 24 porque la serie 
+                                            #  tiene periodicidad quincenal; en una año hay 24 quincenas.
+```
+##                                             Gráfica 3
+<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Diferencias%20estacionales.jpg?raw=true" alt="drawing"/>
+
+###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
+
+#### La Gráfica 3 muestra que las diferencias estacionales de las primeras diferencias del INPC se comportan como ruido blanco; su media es cero y su varianza constante, al aplicar la prueba 𝐴𝐷𝐹 se corroboró que no hay raíz unitaria.
+Como no hay raíz unitaria se graficaron las funciones de autocorrelación (𝐴𝐶𝐹) y autocorrelación parcial (𝑃𝐴𝐶𝐹) para identificar los procesos 𝐴𝑅 y 𝑀𝐴 estacionales:
+
+#### La función de autocorrelación (𝐴𝐶𝐹) de las diferencias estacionales muestra un patrón de comportamiento en el que los rezagos van decreciendo a lo largo de la gráfica y se acercan a cero, por ello, se identificó un proceso de promedios móviles estacionales de segundo orden, es decir, un 𝑆𝑀𝐴(2). En la función de autocorrelación parcial (𝑃𝐴𝐶𝐹) se observa un patrón de comportamiento donde los rezagos van decreciendo y creciendo a lo largo de la gráfica, por ello, se identificó un proceso autorregresivo estacional de primer orden, es decir, un 𝑆𝐴𝑅(1), debido a que se aplicaron a la serie de tiempo las diferencias de orden 24, es decir, se diferenció un período quincenal, formando los órdenes estacionales 𝑆𝐴𝑅𝐼𝑀𝐴(𝑝,𝑑,𝑞) (𝑃,𝐷,𝑄) ⌈𝑆⌉, esto es, 𝑆𝐴𝑅𝐼𝑀𝐴(2,1,2) (1,1,2)24 
+
+#### Identificados los órdenes no estacionales como los estacionales, se pasó a la fase de estimación de los parámetros autorregresivos y de promedios móviles.
+
+## Estimación de los modelos de ajuste
+
+#### La estimación de los parámetros se realizó mediante máxima verosimilitud (ML), generé diversos modelos de ajuste y elegí el que tuvo los menores valores de Akaike, Schwarz y de medidas de precisión. 
+
+#### Criterios AIC y BIC de los modelos de ajuste
+```r
 ajuste_INPC_1 <- arima(INPC, order=c(0,1,0), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
 ajuste_INPC_2 <- arima(INPC, order=c(1,1,0), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
 ajuste_INPC_3 <- arima(INPC, order=c(0,1,1), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
 ajuste_INPC_4 <- arima(INPC, order=c(1,1,1), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
-65
+
 ajuste_INPC_5 <- arima(INPC, order=c(0,1,2), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
 ajuste_INPC_6 <- arima(INPC, order=c(2,1,0), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
 ajuste_INPC_7 <- arima(INPC, order=c(1,1,2), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
 ajuste_INPC_8 <- arima(INPC, order=c(2,1,1), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
 ajuste_INPC_9 <- arima(INPC, order=c(2,1,2), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
-```
-```r
-Modelo_Ajustado <-c("ajuste_INPC_1","ajuste_INPC_2","ajuste_INPC_3","ajuste_INPC_4","ajuste_INPC_5","ajuste_INPC_6","ajuste_INPC_7","ajuste_INPC_8", "ajuste_INPC_9")
+
 Patrones_pdq_y_PDQ <- c("(0,1,0) (1,1,2)","(1,1,0) (1,1,2)","(0,1,1) (1,1,2)","(1,1,1) (1,1,2)","(0,1,2) (1,1,2)","(2,1,0) (1,1,2)","(1,1,2) (1,1,2)","(2,1,1) (1,1,2)","(2,1,2) (1,1,2)")
+
 AIC <- c(ajuste_INPC_1$aic, ajuste_INPC_2$aic, ajuste_INPC_3$aic, ajuste_INPC_4$aic,ajuste_INPC_5$aic, ajuste_INPC_6$aic, ajuste_INPC_7$aic,ajuste_INPC_8$aic, ajuste_INPC_9$aic)
-BIC <- c(BIC(ajuste_INPC_1), BIC(ajuste_INPC_2), BIC(ajuste_INPC_3), BIC(ajuste_INPC_4),BIC(ajuste_INPC_5), BIC(ajuste_INPC_6),
-BIC(ajuste_INPC_7),BIC(ajuste_INPC_8), BIC(ajuste_INPC_9
+
+BIC <- c(BIC(ajuste_INPC_1), BIC(ajuste_INPC_2), BIC(ajuste_INPC_3), BIC(ajuste_INPC_4),BIC(ajuste_INPC_5), BIC(ajuste_INPC_6), BIC(ajuste_INPC_7),BIC(ajuste_INPC_8), BIC(ajuste_INPC_9))
+
+Summary_stat <- (cbind(Patrones_pdq_y_PDQ, AIC, BIC))
 ```
 ```r
-Summary_stat <- cbind(Patrones_pdq_y_PDQ, AIC, BIC)
-Summary_stat
+##     Órdenes_pdq_y_PDQ          AIC                 BIC
+## [1,] "(0,1,0) (1,1,2)" "-920.987620138287" "-902.604498082442"
+## [2,] "(1,1,0) (1,1,2)" "-1058.10642288303" "-1035.12752031322"
+## [3,] "(0,1,1) (1,1,2)" "-1001.72847709152" "-978.749574521712"
+## [4,] "(1,1,1) (1,1,2)" "-1115.85677673985" "-1088.28209365609"
+## [5,] "(0,1,2) (1,1,2)" "-1063.43005438567" "-1035.8553713019"
+## [6,] "(2,1,0) (1,1,2)" "-1110.79289752918" "-1083.21821444541"
+## [7,] "(1,1,2) (1,1,2)" "-1114.12942203252" "-1081.9589584348"
+## [8,] "(2,1,1) (1,1,2)" "-1114.39764767385" "-1082.22718407612"
+## [9,] "(2,1,2) (1,1,2)" "-1116.1732056978" "-1079.40696158611"
 ```
+
 ```r
-Modelo_Ajustado <- as.data.frame(Modelo_Ajustado)
-AIC <- as.data.frame(AIC)
-BIC <- as.data.frame(BIC)
-Summary_stat <- cbind(Modelo_Ajustado, AIC, BIC)
 # AIC
 index_Summary_stat_Akaike_bajo <- which(Summary_stat[,2] == min(Summary_stat[,2]))
 Akaike_mas_bajo <- cbind(Summary_stat[index_Summary_stat_Akaike_bajo,1])
 Ajuste_Akaike_mas_bajo <- cbind(Summary_stat[index_Summary_stat_Akaike_bajo,2])
+
 # BIC
 index_Summary_stat_BIC_bajo <- which(Summary_stat[,3] == min(Summary_stat[,3]))
 BIC_mas_bajo <- cbind(Summary_stat[index_Summary_stat_BIC_bajo,1])
@@ -241,8 +275,17 @@ cat("Modelo de ajuste con valor Akaike más bajo:", Akaike_mas_bajo[1,1])
 cat("Valor Akaike:", Ajuste_Akaike_mas_bajo[1,1])
 cat("Modelo de ajuste con valor BIC más bajo:", BIC_mas_bajo[1,1])
 cat("Valor BIC:", Ajuste_BIC_mas_bajo[1,1])
+```
+
+```r
+## Modelo de ajuste con valor Akaike más bajo: 9
+## Valor Akaike: -1116.2
+## Modelo de ajuste con valor BIC más bajo: 4
+## Valor BIC: -1088.3
+```
 #### Medidas de precisión de los modelos de ajuste
-66
+
+```r
 accuracy_fit_INPC_1 <- forecast::accuracy(ajuste_INPC_1)
 accuracy_fit_INPC_2 <- forecast::accuracy(ajuste_INPC_2)
 accuracy_fit_INPC_3 <- forecast::accuracy(ajuste_INPC_3)
@@ -270,14 +313,23 @@ accuracy_fit_INPC_7[4],accuracy_fit_INPC_8[4],accuracy_fit_INPC_9[4])
 MASE <- c(accuracy_fit_INPC_1[6],accuracy_fit_INPC_2[6],accuracy_fit_INPC_3[6],
 accuracy_fit_INPC_4[6],accuracy_fit_INPC_5[6],accuracy_fit_INPC_6[6],
 accuracy_fit_INPC_7[6],accuracy_fit_INPC_8[6],accuracy_fit_INPC_9[6])
-Summary_accuracy <- cbind(MAPE,ME,RMSE,MAE,MPE,MASE)
-Summary_accuracy
 
-setwd(ruta_exp)
-write.csv(Summary_accuracy, "Medidas_de_precisión.csv")
-setwd(ruta)
-Summary_accuracy <- cbind(Modelo_Ajustado,MAPE,ME,RMSE,MAE,MPE,MASE)
-# Calculando índices para obtener los valores más bajos del resumen estadístico de precisión de los modelos de ajuste
+Summary_accuracy <- (cbind(MAPE,ME,RMSE,MAE,MPE,MASE))
+```
+```r
+##        MAPE      ME      RMSE     MAE     MPE     MASE
+## [1,] 0.20796 0.0094089 0.12484 0.080528 0.043476 0.51007
+## [2,] 0.16669 0.0052839 0.11331 0.071353 0.025043 0.45196
+## [3,] 0.18435 0.0074426 0.11795 0.074910 0.034549 0.47449
+## [4,] 0.15311 0.0029299 0.10855 0.068127 0.014362 0.43152
+## [5,] 0.17173 0.0063236 0.11271 0.071891 0.029207 0.45536
+## [6,] 0.15581 0.0040521 0.10894 0.069158 0.018878 0.43806
+## [7,] 0.15322 0.0030848 0.10852 0.068220 0.014939 0.43211
+## [8,] 0.15339 0.0032080 0.10850 0.068306 0.015408 0.43266
+## [9,] 0.15225 0.0030495 0.10821 0.068110 0.014771 0.43142
+```
+
+```r
 index_MAPE <- which(Summary_accuracy[,2] == min(Summary_accuracy[,2]))
 MAPE_mas_bajo <- cbind(Summary_accuracy[index_MAPE ,1])
 Valor_MAPE_mas_bajo <- cbind(Summary_accuracy[index_MAPE,2])
@@ -309,6 +361,84 @@ MASE_mas_bajo <- cbind(Summary_accuracy[index_MASE,1])
 Valor_MASE_mas_bajo <- cbind(Summary_accuracy[index_MASE,7])
 cat("Modelo de ajuste con MASE más bajo:", MASE_mas_bajo[1,1])
 cat("Valor MASE:", Valor_MASE_mas_bajo[1,1])
+```
+
+```r
+## Modelo de ajuste con MAPE más bajo: 9
+## Valor MAPE: 0.15225
+## Modelo de ajuste con ME más bajo: 4
+## Valor ME: 0.0029299
+## Modelo de ajuste con RMSE más bajo: 9
+## Valor RMSE: 0.10821
+## Modelo de ajuste con MAE más bajo: 9
+## Valor MAE: 0.06811
+## Modelo de ajuste con MPE más bajo: 4
+## Valor MPE: 0.014362
+## Modelo de ajuste con MASE más bajo: 9
+## Valor MASE: 0.43142
+```
+
+#### Tanto el criterio de Akaike como las medidas de precisión: 𝑀𝐴𝑃𝐸, 𝑅𝑀𝑆𝐸, 𝑀𝐴𝐸 y 𝑀𝐴𝑆𝐸 sugirieron que el modelo de ajuste con valor más bajo es el número 9; por otra parte, el criterio de Schwarz (𝐵𝐼𝐶) y las medidas de precisión: 𝑀𝐸 y 𝑀𝑃𝐸, sugirieron que el modelo de ajuste con valor más bajo es el número 4. Debido a los resultados obtenidos por los criterios de selección, se eligieron los modelos de ajuste número 4 y número 9: antes de pasar a la fase de examen de diagnóstico se generaron cinco modelos de ajuste adicionales con el objetivo de identificar que, mientras aumenten los órdenes autorregresivos y de promedios móviles, disminuyen los valores de los criterios de selección, el resultado en «R» fue el siguiente:
+
+```r
+## Modelo_Ajustado  Órdenes_pdq_y_PDQ      AIC    BIC
+## 1 Ajuste_INPC_1  (0,1,0) (1,0,0)     -920.99  -902.6
+## 2 Ajuste_INPC_2  (1,1,1) (1,0,0)     -1115.86 -1088.3
+## 3 Ajuste_INPC_3  (2,1,2) (1,0,0)     -1116.17 -1079.4
+## 4 Ajuste_INPC_4  (3,1,3) (1,0,0)     -1119.22 -1073.3
+## 5 Ajuste_INPC_5  (4,1,4) (1,0,0)     -1120.20 -1065.0
+```
+```r
+## Modelo de ajuste con valor Akaike más bajo: 5
+## Valor Akaike: -1120.2
+## Modelo de ajuste con valor BIC más bajo: 2
+## Valor BIC: -1088.3
+```
+## Medidas de precisión de los modelos de ajuste
+
+```r
+## Modelo_Ajustado MAPE ME RMSE MAE MPE MASE
+## 1 Ajuste_INPC_1 0.20796 0.0094089 0.12484 0.080528 0.043476 0.51007
+## 2 Ajuste_INPC_2 0.15311 0.0029299 0.10855 0.068127 0.014362 0.43152
+## 3 Ajuste_INPC_3 0.15225 0.0030495 0.10821 0.068110 0.014771 0.43142
+## 4 Ajuste_INPC_4 0.15287 0.0030495 0.10768 0.068239 0.014636 0.43224
+## 5 Ajuste_INPC_5 0.15120 0.0020802 0.10732 0.067396 0.012158 0.42689
+```
+
+```r
+## Modelo de ajuste con MAPE más bajo: 5
+## Valor MAPE: 0.1512
+## Modelo de ajuste con ME más bajo: 5
+## Valor ME: 0.0020802
+## Modelo de ajuste con RMSE más bajo: 5
+## Valor RMSE: 0.10732
+## Modelo de ajuste con MAE más bajo: 5
+## Valor MAE: 0.067396
+## Modelo de ajuste con MPE más bajo: 5
+## Valor MPE: 0.012158
+## Modelo de ajuste con MASE más bajo: 5
+## Valor MASE: 0.42689
+```
+#### Se graficaron las medidas de precisión para identificar visualmente que sus valores disminuyen conforme aumentan los órdenes no estacionales, los resultados se muestran en las Gráficas 4 y 5.
+
+
+##                                             Gráfica 4
+<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Medidas%20de%20precisi%C3%B3n.jpg?raw=true" alt="drawing"/>
+
+###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
+
+##                                             Gráfica 5
+<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Exactitud.jpg?raw=true" alt="drawing"/>
+
+###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
+
+
+```r
+
+
+#### Medidas de precisión de los modelos de ajuste
+
+
 INPC <- INPC
 ajuste_x <- arima(INPC, order=c(1,1,1), seasonal = list(order = c(1,1,2), period = 24),method="ML", include.mean = TRUE)
 tsdiag(ajuste_x)
@@ -831,26 +961,6 @@ write.csv(Summary_stat, "AIC BIC_III.csv")
 setwd(ruta)
 ```
 
-
-##                                             Gráfica 3
-<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Diferencias%20estacionales.jpg?raw=true" alt="drawing"/>
-
-###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
-
-
-##                                             Gráfica 4
-<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Medidas%20de%20precisi%C3%B3n.jpg?raw=true" alt="drawing"/>
-
-###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
-
-\begin{equation}
-   $$MAPE = \frac{1}{n}\sum_{i = 1}^{n}\frac{\left | {A_i} - {F_i} \right |* 100}{{A_i}}$$
-\end{equation}
-
-##                                             Gráfica 5
-<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Exactitud.jpg?raw=true" alt="drawing"/>
-
-###### Fuente: Elaboración propia en Excel con datos del BIE del INEGI
 
 ##                                             Gráfica 6
 <img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Akaike%20y%20BIC.jpg?raw=true" alt="drawing"/>
