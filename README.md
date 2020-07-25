@@ -822,41 +822,42 @@ pronostico_z <- sarima.for(INPC_General, n.ahead = 24, p = 3, d =1, q = 1, P = 1
 
 # Seguimiento al comportamiento del INPC e inflación
 
-<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Seguimiento a inflación e INPC.png" alt="drawing"/>
+<img src="https://github.com/StefanoSoriano/Tesis/blob/master/Im%C3%A1genes/Seguimiento.jpg" alt="drawing"/>
 
 ###### Fuente: Elaboración propia en Excel con datos del INPC pronosticado e INPC observado
 
 ## Datos del INPC general y de la inflación (período quincenal)
 ###### *NOTA: El cálculo de la inflación quincenal mostrada enseguida es anualizada, el INEGI proporciona el valor de la inflación quincenal inmediata.* 
 
-##### Fecha y hora de consulta: 27 de marzo del 2020 a las 10:34 pm
+##### Fecha y hora de consulta: 25 de julio del 2020 a las 10:25 am
 
 |	Período	|	INPC Pronosticado	|	INPC Observado	|  	Inflación Pronosticada	|	Inflación Observada	|
 |	----------	|	----------	|	----------	|	----------	|	----------	|
-|	2Q julio 2019	|	103.79	|	103.72	|	3.79%	|	3.72%	|
-|	1Q agosto 2019	|	104.05	|	103.642	|	3.70%	|	3.29%	|
-|	2Q agosto 2019	|	104.19	|	103.697	|	3.53%	|	3.04%	|
-|	1Q septiembre 2019	|	104.52	|	103.877	|	3.62%	|	2.99%	|
-|	2Q septiembre 2019	|	104.55	|	104.007	|	3.55%	|	3.01%	|
-|	1Q octubre 2019	|	105.02	|	104.42	|	3.60%	|	3.01%	|
-|	2Q octubre 2019	|	105.14	|	104.587	|	3.58%	|	3.03%	|
-|	1Q noviembre 2019	|	105.84	|	105.299	|	3.63%	|	3.10%	|
-|	2Q noviembre 2019	|	105.90	|	105.393	|	3.34%	|	2.85%	|
-|	1Q diciembre 2019	|	106.29	|	105.763	|	3.15%	|	2.63%	|
-|	2Q diciembre 2019	|	106.48	|	106.105 |	3.38%	|	3.02%	|
-|	1Q enero 2020	|	106.88	|	106.388 |	3.66%	|	3.18%	|
-|	2Q enero 2020	|	107.10	|	106.506	|	3.86%	|	3.29%	|
-|	1Q febrero 2020	|	107.27	|	106.636	|	4.14%	|	3.52%	|
-|	2Q febrero 2020	|	107.37	|	107.141	|	4.10%	|	3.87%	|
-|	1Q marzo 2020	|	107.62	|	107.254	|	4.06%	|	3.71%	|
-|	2Q marzo 2020	|	107.78	|		|	4.10%	|		|
-|	1Q abri 2020	|	107.55	|		|	3.91%	|		|
-|	2Q abril 2020	|	107.61	|		|	3.91%	|		|
-|	1Q mayo 2020	|	107.26	|		|	3.88%	|		|
-|	2Q mayo 2020	|	107.39	|		|	4.05%	|		|
-|	1Q junio 2020	|	107.49	|		|	4.13%	|		|
-|	2Q junio 2020	|	107.58	|		|	4.07%	|		|
-|	1Q julio 2020	|	107.82	|		|	4.01%	|		|
+|	2Q julio 2019	|	103.79	|	103.72	|	3.79 %	|	3.72 %	|
+|	1Q agosto 2019	|	104.05	|	103.642	|	3.70 %	|	3.29 %	|
+|	2Q agosto 2019	|	104.19	|	103.697	|	3.53 %	|	3.04 %	|
+|	1Q septiembre 2019	|	104.52	|	103.877	|	3.62 %	|	2.99 %	|
+|	2Q septiembre 2019	|	104.55	|	104.007	|	3.55 %	|	3.01 %	|
+|	1Q octubre 2019	|	105.02	|	104.42	|	3.60 %	|	3.01 %	|
+|	2Q octubre 2019	|	105.14	|	104.587	|	3.58 %	|	3.03 %	|
+|	1Q noviembre 2019	|	105.84	|	105.299	|	3.63 %	|	3.10 %	|
+|	2Q noviembre 2019	|	105.90	|	105.393	|	3.34 %	|	2.85 %	|
+|	1Q diciembre 2019	|	106.29	|	105.763	|	3.15 %	|	2.63 %	|
+|	2Q diciembre 2019	|	106.48	|	106.105 |	3.38 %	|	3.02 %	|
+|	1Q enero 2020	|	106.88	|	106.388 |	3.66 %	|	3.18 %	|
+|	2Q enero 2020	|	107.10	|	106.506	|	3.86 %	|	3.29 %	|
+|	1Q febrero 2020	|	107.27	|	106.636	|	4.14 %	|	3.52 %	|
+|	2Q febrero 2020	|	107.37	|	107.141	|	4.10 %	|	3.87 %	|
+|	1Q marzo 2020	|	107.62	|	107.254	|	4.06 %	|	3.71 %	|
+|	2Q marzo 2020	|	107.78	|	106.422	|	4.10 %	|	2.79 %	|
+|	1Q abri 2020	|	107.55	|	105.655	|	3.91 %	|	2.08 %	|
+|	2Q abril 2020	|	107.61	|	105.854	|	3.91 %	|	2.21 %	|
+|	1Q mayo 2020	|	107.26	|	106.167	|	3.88 %	|	2.83 %	|
+|	2Q mayo 2020	|	107.39	|	106.158	|	4.05 %	|	2.85 %	|
+|	1Q junio 2020	|	107.49	|	106.495	|	4.13 %	|	3.17 %	|
+|	2Q junio 2020	|	107.58	|	106.991	|	4.07 %	|	3.50 %	|
+|	1Q julio 2020	|	107.82	|	107.371	|	4.01 %	|	3.59 %	|
+
 
 ###### Fuente: Elaboración propia con datos del BIE del INEGI
 ###### [Los datos del INPC general quincenal (actualizados) se pueden consultar dando click aquí](https://www.inegi.org.mx/sistemas/bie/?idserPadre=10000500001500600040)
