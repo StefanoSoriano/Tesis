@@ -29,52 +29,26 @@ ts(data = NA, start = 1, end = numeric(), frequency = 1)
 
 ####  La condición if evalúa que la librería no se encuentre dentro de los paquetes instalados, si la condición resulta ser verdad, es decir, si la librería en particular no se encuentra dentro de los paquetes instalados entonces se instala.
 ```r
-if (!"astsa" %in% rownames(installed.packages())) {
- install.packages("astsa")
-}
-if (!"tseries" %in% rownames(installed.packages())) {
- install.packages("tseries")
-}
-if (!"timeSeries" %in% rownames(installed.packages())) {
- install.packages("timeSeries")
-}
-if (!"fGarch" %in% rownames(installed.packages())) {
- install.packages("fGarch")
-}
-if (!"forecast" %in% rownames(installed.packages())) {
- install.packages("forecast")
-}
-if (!"dplyr" %in% rownames(installed.packages())) {
- install.packages("dplyr")
-}
-if (!"stats" %in% rownames(installed.packages())) {
- install.packages("stats")
-}
-if (!"zoo" %in% rownames(installed.packages())) {
- install.packages("zoo")
-}
-if (!"moments" %in% rownames(installed.packages())) {
- install.packages("moments")
-}
-if (!"RCurl" %in% rownames(installed.packages())) {
- install.packages("RCurl")
+
+librerias <- c("astsa",
+               "tseries",
+               "timeSeries",
+               "fgarch",
+               "stats",
+               "zoo",
+               "ggplot2",
+               "moments",
+               "RCurl")
+
+for (i in librerias) {
+    if (! i %in% row.names(installed.packages())) {
+        install.packages(i);
+        sapply(i, require, character.only = TRUE)
+  } else {
+        sapply(i, require, character.only = TRUE)
+  }
 }
 ```
-
-####  Cargar librerías                
-
-```r
-library(astsa)
-library(tseries)
-library(timeSeries)
-library(fGarch)
-library(stats)
-library(zoo)
-library(ggplot2)
-library(moments)
-library(RCurl)
-```
-
 ####  Importar datos del INPC general desde repositorio en GitHub
 
 ```r
